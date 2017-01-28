@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/item_padding">
+
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="@dimen/item_coffee"
+        android:layout_height="@dimen/item_coffee"
+        tools:src="@drawable/ic_cafe_au_lait"
+        android:contentDescription="@string/content_coffee_icon"/>
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/image_icon"
+        android:paddingStart="@dimen/text_margin"
+        android:paddingEnd="@dimen/text_margin"
+        android:layout_centerVertical="true"
+        android:maxLines="2"
+        android:textSize="@dimen/text_large"
+        tools:text="Café au lait" />
+
+</RelativeLayout>
