@@ -1,0 +1,42 @@
+[
+  {
+    "name":"Café au lait",
+    "description":"A drink made with French-pressed coffee and an added touch of hot milk. This drink originates from - you guessed it! - France.",
+    "drawableResourceName":"ic_cafe_au_lait"
+  },
+  {
+    "name":"Caffè latte",
+    "description":"A Caffè latte (or latte for short) is a creamy drink that is made by adding steamed milk to espresso. It originates from Italy where it is traditionally prepared at home during breakfast.",
+    "drawableResourceName":"ic_caffe_latte"
+  },
+  {
+    "name":"Cà phê sữa đá",
+    "description":"This Vietnamese drink is made with a dark roast coffee mixed with sweetened condensed milk. The condensed milk and coffee mixture is then poured over ice and served cold. Yum!",
+    "drawableResourceName":"ic_ca_phe_sua_da"
+  },
+  {
+    "name":"Flat white",
+    "description":"A flat white is an espresso-based coffee beverage that is prepared by pouring steamed milk over a shot of espresso. These are typically smaller than lattes or cappuccinos and have a higher proportion of coffee to milk, which allows the espresso flavour to really shine through.",
+    "drawableResourceName":"ic_flat_white"
+  },
+  {
+    "name":"Caffé Americano",
+    "description":"A style of coffee that is prepared by adding hot water to a single or double-shot of espresso. The amount of hot water to add varies.",
+    "drawableResourceName":"ic_caffe_americano"
+  },
+  {
+    "name":"Café bombón",
+    "description":"This drink originates in Spain, and has been modified by various countries to suit different tastes. Tratitionally, a café bombón us made using a 1:1 ratio of espresso and sweetened condensed milk, where the condensed milk is added to the espresso (and not the other way around). A glass is often used for added visual effect.",
+    "drawableResourceName":"ic_cafe_bombon"
+  },
+  {
+    "name":"Café mocha",
+    "description":"A café mocha (or mocha for short) is a type of caffè latte. Similar to the latte, it is typically made with 1/3 espresso and 2/3 steamed milk. In a mocha, however, chocolate is added. Yum!",
+    "drawableResourceName":"ic_cafe_mocha"
+  },
+  {
+    "name":"Latte macchiato",
+    "description":"A latte macchiato (or macchiato for short) differs from your average latte in that the espresso is added to the steamed milk rather than the other way around. Macchiatos typically feature more milk-foam and less espresso, which give them much less coffee flavour.",
+    "drawableResourceName":"ic_latte_macchiato"
+  }
+]
