@@ -15,17 +15,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.adapter.BeverageAdapter;
+import com.noralynn.coffeecompanion.adapter.beverages.BeverageAdapter;
 import com.noralynn.coffeecompanion.model.Beverage;
 import com.noralynn.coffeecompanion.utils.DataUtils;
-import com.yelp.clientlib.connection.YelpAPI;
-import com.yelp.clientlib.connection.YelpAPIFactory;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
-    @NonNull
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @NonNull
@@ -38,7 +35,23 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private ArrayList<Beverage> mBeverages;
 
     @NonNull
-    private RecyclerView mBeveragesRecyclerView;
+    private RecyclerView mBeverageRecyclerView;
+
+    @NonNull
+    private OnClickListener mBeverageClickListener = new OnClickListener() {
+        @Override
+        public void onClick(@NonNull View view) {
+            startBeverageActivity(view);
+        }
+    };
+
+    @NonNull
+    private OnClickListener mFabClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startCoffeeShopActivity();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +64,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             mBeverages = savedInstanceState.getParcelableArrayList(BEVERAGES_BUNDLE_KEY);
         }
 
-        mBeveragesRecyclerView = (RecyclerView) findViewById(R.id.recycler_coffee);
+        mBeverageRecyclerView = (RecyclerView) findViewById(R.id.beverages_recycler);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //todo: Yelp API call to find nearby coffee shops
-                YelpAPIFactory apiFactory = new YelpAPIFactory(consumerKey, consumerSecret, token, tokenSecret);
-                YelpAPI yelpAPI = apiFactory.createAPI();
-
-
-            }
-        });
+        fab.setOnClickListener(mFabClickListener);
 
         checkBeveragesInfo();
     }
@@ -84,31 +88,36 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         mBeverages = DataUtils.deserializeBeveragesFromJson(this);
         if (null != mBeverages) {
             BeverageAdapter adapter = new BeverageAdapter(this, mBeverages);
-            adapter.setClickListener(this);
-            mBeveragesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mBeveragesRecyclerView.setAdapter(adapter);
+            adapter.setClickListener(mBeverageClickListener);
+            mBeverageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mBeverageRecyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
     }
 
-    @Override
-    public void onClick(@NonNull View view) {
+    private void startBeverageActivity(@NonNull View view) {
         Log.d(TAG, "onClick() called with: view = [" + view + "]");
         if (null == mBeverages) {
             return;
         }
 
-        int position = mBeveragesRecyclerView.getChildLayoutPosition(view);
+        int position = mBeverageRecyclerView.getChildLayoutPosition(view);
         if (position >= mBeverages.size()) {
             return;
         }
 
         Beverage beverage = mBeverages.get(position);
         if (null != beverage) {
-            Intent beverageActivityIntent = new Intent(this, BeverageActivity.class);
+            Intent beverageActivityIntent = new Intent(MainActivity.this, BeverageActivity.class);
             beverageActivityIntent.putExtra(BEVERAGE_INTENT_KEY, beverage);
             startActivity(beverageActivityIntent);
         }
     }
+
+    private void startCoffeeShopActivity() {
+        Intent coffeeShopActivityIntent = new Intent(this, CoffeeShopActivity.class);
+        startActivity(coffeeShopActivityIntent);
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.adapter;
+package com.noralynn.coffeecompanion.adapter.beverages;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -16,21 +16,21 @@ import com.noralynn.coffeecompanion.utils.ResourceUtils;
 class BeverageViewHolder extends ViewHolder {
 
     @NonNull
-    private TextView mTextTitle;
+    private TextView mTitleTextView;
 
     @NonNull
-    private ImageView mImageIcon;
+    private ImageView mIconImageView;
 
     BeverageViewHolder(@NonNull View itemView) {
         super(itemView);
-        mTextTitle = (TextView) itemView.findViewById(R.id.text_title);
-        mImageIcon = (ImageView) itemView.findViewById(R.id.image_icon);
+        mTitleTextView = (TextView) itemView.findViewById(R.id.text_title);
+        mIconImageView = (ImageView) itemView.findViewById(R.id.image_icon);
     }
 
     void bind(@NonNull Context context, @NonNull Beverage beverage) {
-        mTextTitle.setText(beverage.getName());
+        mTitleTextView.setText(beverage.getName());
         Drawable icon = ResourceUtils.getDrawableByName(context, beverage.getDrawableResourceName());
-        mImageIcon.setImageDrawable(icon);
+        mIconImageView.setImageDrawable(icon);
     }
 
 }

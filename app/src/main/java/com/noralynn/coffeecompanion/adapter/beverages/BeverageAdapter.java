@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.adapter;
+package com.noralynn.coffeecompanion.adapter.beverages;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
