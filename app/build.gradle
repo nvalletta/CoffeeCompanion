@@ -31,6 +31,9 @@ dependencies {
     // GSON
     compile 'com.google.code.gson:gson:2.8.0'
 
+    // Yelp v2 API client library for Android
+    compile 'com.yelp.clientlib:yelp-android:3.0.0'
+
     // JUnit and Android test dependencies
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test:runner:0.5'

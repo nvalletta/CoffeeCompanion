@@ -2,4 +2,6 @@
     <string name="app_name">Coffee Companion</string>
     <string name="content_fox_mug">Fox mug</string>
     <string name="content_coffee_icon">Coffee Icon</string>
+    <string name="content_beverage_image">A delicious beverage</string>
+    <string name="error_unable_to_load_beverage">We\'re unable to display beverage info at this time. Sorry!</string>
 </resources>
