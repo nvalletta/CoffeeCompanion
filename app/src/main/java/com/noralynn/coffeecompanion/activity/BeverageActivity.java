@@ -57,7 +57,7 @@ public class BeverageActivity extends AppCompatActivity implements BeverageView 
     }
 
     @Override
-    public void showErrorText(@StringRes int messageResId) {
+    public void showErrorText(@StringRes int message) {
         if (null == titleTextView) {
             return;
         }

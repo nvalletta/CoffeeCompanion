@@ -41,9 +41,15 @@ class CoffeeShopViewHolder extends ViewHolder {
 
     void bind(@NonNull CoffeeShop coffeeShop) {
         mNameTextView.setText(coffeeShop.getName());
-        mDistanceTextView.setText(String.format(Locale.getDefault(), "%1$,.2f mi", coffeeShop.getDistance()));
         mRatingBar.setRating((float)coffeeShop.getRating());
         mIsClosedTextView.setText(coffeeShop.isClosed() ? mContext.getString(R.string.closed) : mContext.getString(R.string.open));
+        double distance = coffeeShop.getDistance();
+        if (distance != 0.0d) {
+            mDistanceTextView.setVisibility(View.VISIBLE);
+            mDistanceTextView.setText(String.format(Locale.getDefault(), "%1$,.2f mi", coffeeShop.getDistance()));
+        } else {
+            mDistanceTextView.setVisibility(View.GONE);
+        }
     }
 
 }

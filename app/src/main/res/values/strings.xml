@@ -6,4 +6,6 @@
     <string name="error_unable_to_load_beverage">We\'re unable to display beverage info at this time. Sorry!</string>
     <string name="closed">Closed</string>
     <string name="open">Open</string>
+    <string name="error_unable_to_load_coffee_shops">Sorry! I can\'t find any coffee shops at this time.</string>
+    <string name="no_nearby_coffee_shops">Aww, there aren\'t any nearby coffee shops…</string>
 </resources>

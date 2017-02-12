@@ -10,7 +10,7 @@ interface BeverageView {
 
     void initializeViews();
 
-    void showErrorText(@StringRes int messageResId);
+    void showErrorText(@StringRes int message);
 
     void setTitle(@NonNull String name);
 

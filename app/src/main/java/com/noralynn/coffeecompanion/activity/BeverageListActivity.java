@@ -18,6 +18,8 @@ import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.adapter.beverages.BeverageAdapter;
 import com.noralynn.coffeecompanion.model.Beverage;
 
+import java.util.List;
+
 public class BeverageListActivity extends AppCompatActivity implements BeverageListView {
 
     @NonNull
@@ -97,7 +99,7 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     }
 
     @Override
-    public BeverageListModel getSavedInstanceState(@NonNull Bundle savedInstanceState) {
+    public BeverageListModel getSavedBeverageListModel(@NonNull Bundle savedInstanceState) {
         return savedInstanceState.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
     }
 
@@ -108,15 +110,17 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     }
 
     @Override
-    public void loadModel(@NonNull BeverageListModel beverageListModel) {
+    public void setModel(@NonNull BeverageListModel beverageListModel) {
         this.beverageListModel = beverageListModel;
+    }
 
+    @Override
+    public void displayBeverages(@NonNull List<Beverage> beverages) {
         if (null != beverageRecyclerView) {
-            BeverageAdapter adapter = new BeverageAdapter(this, this.beverageListModel.getBeverages());
+            BeverageAdapter adapter = new BeverageAdapter(this, beverages);
             adapter.setClickListener(beverageClickListener);
             beverageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             beverageRecyclerView.setAdapter(adapter);
         }
     }
-
 }

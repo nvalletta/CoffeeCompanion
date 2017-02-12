@@ -57,7 +57,7 @@ class BeverageListViewPresenter {
     private BeverageListModel getBundledBeverageListModel(@Nullable Bundle savedInstanceState) {
         BeverageListModel model = null;
         if (null != savedInstanceState) {
-            model = beverageListView.getSavedInstanceState(savedInstanceState);
+            model = beverageListView.getSavedBeverageListModel(savedInstanceState);
         }
         return model != null ? model : new BeverageListModel();
     }
@@ -73,7 +73,8 @@ class BeverageListViewPresenter {
         beverages = DataUtils.deserializeBeveragesFromJson(beverageListView.getContext());
         if (null != beverages) {
             beverageListModel.setBeverages(beverages);
-            beverageListView.loadModel(beverageListModel);
+            beverageListView.setModel(beverageListModel);
+            beverageListView.displayBeverages(beverages);
         }
     }
 

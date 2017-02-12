@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.noralynn.coffeecompanion.model.Beverage;
 
+import java.util.List;
+
 interface BeverageListView {
 
     void initializeViews();
@@ -18,10 +20,12 @@ interface BeverageListView {
 
     void startBeverageActivity(@NonNull Beverage beverage);
 
-    void loadModel(@NonNull BeverageListModel beverageListModel);
+    void displayBeverages(@NonNull List<Beverage> beverages);
+
+    void setModel(@NonNull BeverageListModel beverageListModel);
 
     @Nullable
-    BeverageListModel getSavedInstanceState(@NonNull Bundle savedInstanceState);
+    BeverageListModel getSavedBeverageListModel(@NonNull Bundle savedInstanceState);
 
     @NonNull
     Context getContext();
