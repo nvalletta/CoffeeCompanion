@@ -23,13 +23,13 @@ public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
     @NonNull
     private LayoutInflater mLayoutInflater;
 
-    @NonNull
+    @Nullable
     private List<Beverage> mBeverages = new ArrayList<>();
 
     @Nullable
     private OnClickListener mOnClickListener;
 
-    public BeverageAdapter(@NonNull Context context, @NonNull List<Beverage> beverages) {
+    public BeverageAdapter(@NonNull Context context, @Nullable List<Beverage> beverages) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mBeverages = beverages;
@@ -48,6 +48,9 @@ public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
 
     @Override
     public void onBindViewHolder(BeverageViewHolder holder, int position) {
+        if (null == mBeverages) {
+            return;
+        }
         Beverage beverage = mBeverages.get(position);
         if (null != holder) {
             holder.bind(mContext, beverage);
@@ -56,6 +59,9 @@ public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (mBeverages == null) {
+            return 0;
+        }
         return mBeverages.size();
     }
 

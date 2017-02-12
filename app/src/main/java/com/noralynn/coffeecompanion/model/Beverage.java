@@ -36,6 +36,11 @@ public class Beverage implements Parcelable {
         return drawableResourceName;
     }
 
+
+    //////////////////////////////////////
+    //    Parcelable Implementation     //
+    //////////////////////////////////////
+
     public static final Parcelable.Creator<Beverage> CREATOR
             = new Parcelable.Creator<Beverage>() {
         public Beverage createFromParcel(Parcel in) {

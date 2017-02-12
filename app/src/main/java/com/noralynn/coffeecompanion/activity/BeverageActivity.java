@@ -26,7 +26,7 @@ public class BeverageActivity extends AppCompatActivity {
         if (null != intent) {
             Bundle extras = intent.getExtras();
             if (null != extras) {
-                mBeverage = extras.getParcelable(MainActivity.BEVERAGE_INTENT_KEY);
+                mBeverage = extras.getParcelable(BeverageListActivity.BEVERAGE_INTENT_KEY);
             }
         }
 
