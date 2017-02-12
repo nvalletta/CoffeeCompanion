@@ -17,11 +17,11 @@ class BeverageListModel implements Parcelable {
     }
 
     @Nullable
-    public List<Beverage> getBeverages() {
+    List<Beverage> getBeverages() {
         return mBeverages;
     }
 
-    public void setBeverages(@Nullable List<Beverage> mBeverages) {
+    void setBeverages(@Nullable List<Beverage> mBeverages) {
         this.mBeverages = mBeverages;
     }
 

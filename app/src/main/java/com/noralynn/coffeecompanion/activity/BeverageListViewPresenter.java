@@ -39,7 +39,7 @@ class BeverageListViewPresenter {
         }
 
         int position = beverageListView.getRecyclerPositionForView(view);
-        if (position >= beverages.size()) {
+        if (position >= beverages.size() || position < 0) {
             return;
         }
 

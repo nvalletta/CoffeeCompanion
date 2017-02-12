@@ -24,17 +24,13 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     private static final String BEVERAGE_LIST_MODEL_BUNDLE_KEY = "BEVERAGE_LIST_MODEL_BUNDLE_KEY";
 
     @NonNull
-    public static final String BEVERAGE_INTENT_KEY = "BEVERAGE_INTENT_KEY";
-
-    @Nullable
-    private BeverageListModel beverageListModel;
+    private BeverageListModel beverageListModel = new BeverageListModel();
 
     @NonNull
     @SuppressWarnings("NullableProblems")
     private BeverageListViewPresenter presenter;
 
-    @NonNull
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     private RecyclerView beverageRecyclerView;
 
     @NonNull
@@ -75,6 +71,9 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
 
     @Override
     public int getRecyclerPositionForView(@NonNull View view) {
+        if (null == beverageRecyclerView) {
+            return -1;
+        }
         return beverageRecyclerView.getChildAdapterPosition(view);
     }
 
@@ -87,7 +86,7 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     @Override
     public void startBeverageActivity(@NonNull Beverage beverage) {
         Intent beverageActivityIntent = new Intent(BeverageListActivity.this, BeverageActivity.class);
-        beverageActivityIntent.putExtra(BEVERAGE_INTENT_KEY, beverage);
+        beverageActivityIntent.putExtra(BeverageActivity.BEVERAGE_INTENT_KEY, beverage);
         startActivity(beverageActivityIntent);
     }
 
@@ -112,10 +111,12 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     public void loadModel(@NonNull BeverageListModel beverageListModel) {
         this.beverageListModel = beverageListModel;
 
-        BeverageAdapter adapter = new BeverageAdapter(this, this.beverageListModel.getBeverages());
-        adapter.setClickListener(beverageClickListener);
-        beverageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        beverageRecyclerView.setAdapter(adapter);
+        if (null != beverageRecyclerView) {
+            BeverageAdapter adapter = new BeverageAdapter(this, this.beverageListModel.getBeverages());
+            adapter.setClickListener(beverageClickListener);
+            beverageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            beverageRecyclerView.setAdapter(adapter);
+        }
     }
 
 }
