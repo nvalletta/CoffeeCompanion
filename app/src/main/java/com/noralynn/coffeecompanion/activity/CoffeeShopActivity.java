@@ -1,9 +1,11 @@
 package com.noralynn.coffeecompanion.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +20,6 @@ import com.noralynn.coffeecompanion.model.CoffeeShop;
 import java.util.List;
 
 public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopView {
-
-    private static final String TAG = CoffeeShopActivity.class.getSimpleName();
-
-    @NonNull
-    private static final String COFFEE_SHOPS_INTENT_KEY = "COFFEE_SHOPS_INTENT_KEY";
 
     @NonNull
     private static final String COFFEE_SHOPS_BUNDLE_KEY = "COFFEE_SHOPS_BUNDLE_KEY";
@@ -73,9 +70,27 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         coffeeShopRecyclerView.setAdapter(coffeeShopAdapter);
     }
 
+    @NonNull
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void requestPermission(int requestCode, @NonNull String[] permissions) {
+        ActivityCompat.requestPermissions(this, permissions, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        coffeeShopViewPresenter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     public void showMessage(@StringRes int message) {
         coffeeShopRecyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
         emptyTextView.setVisibility(View.VISIBLE);
         emptyTextView.setText(getString(message));
     }

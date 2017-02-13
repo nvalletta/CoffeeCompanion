@@ -22,6 +22,7 @@ class BeverageModel implements Parcelable {
         this.beverage = beverage;
     }
 
+
     //////////////////////////////////////
     //    Parcelable Implementation     //
     //////////////////////////////////////

@@ -20,9 +20,13 @@ public class CoffeeShop implements Parcelable {
 
     public CoffeeShop(Business business) {
         rating = business.rating() == null ? 0.0d : business.rating();
-        distance = business.distance() == null ? 0.0d : business.distance();
+        distance = business.distance() == null ? 0.0d : convertFromMetersToMiles(business.distance());
         name = business.name();
         isClosed = business.isClosed() == null ? true : business.isClosed();
+    }
+
+    private double convertFromMetersToMiles(double distance) {
+        return distance * 0.000621371192;
     }
 
     public double getRating() {
@@ -41,6 +45,11 @@ public class CoffeeShop implements Parcelable {
     public boolean isClosed() {
         return isClosed;
     }
+
+
+    //////////////////////////////////////
+    //    Parcelable Implementation     //
+    //////////////////////////////////////
 
     public static final Parcelable.Creator<CoffeeShop> CREATOR
             = new Parcelable.Creator<CoffeeShop>() {

@@ -11,7 +11,9 @@ import java.util.List;
 class CoffeeShopModel implements Parcelable {
 
     @Nullable
-    List<CoffeeShop> coffeeShops;
+    private List<CoffeeShop> coffeeShops;
+
+    private boolean hasLocationPermission;
 
     CoffeeShopModel() { }
 
@@ -24,6 +26,13 @@ class CoffeeShopModel implements Parcelable {
         this.coffeeShops = coffeeShops;
     }
 
+    public boolean hasLocationPermission() {
+        return hasLocationPermission;
+    }
+
+    public void setHasLocationPermission(boolean hasLocationPermission) {
+        this.hasLocationPermission = hasLocationPermission;
+    }
 
     //////////////////////////////////////
     //    Parcelable Implementation     //
@@ -31,6 +40,7 @@ class CoffeeShopModel implements Parcelable {
 
     private CoffeeShopModel(Parcel in) {
         coffeeShops = in.createTypedArrayList(CoffeeShop.CREATOR);
+        hasLocationPermission = in.readByte() != 0;
     }
 
     public static final Creator<CoffeeShopModel> CREATOR = new Creator<CoffeeShopModel>() {
@@ -53,5 +63,6 @@ class CoffeeShopModel implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(coffeeShops);
+        dest.writeByte((byte)(hasLocationPermission ? 1 : 0));
     }
 }
