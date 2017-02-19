@@ -1,23 +1,21 @@
-package com.noralynn.coffeecompanion.activity;
+package com.noralynn.coffeecompanion.beveragedetail;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.model.Beverage;
-import com.noralynn.coffeecompanion.utils.ResourceUtils;
+import com.noralynn.coffeecompanion.common.Beverage;
+import com.noralynn.coffeecompanion.common.DrawableUtils;
 
-public class BeverageActivity extends AppCompatActivity implements BeverageView {
+public class BeverageDetailActivity extends AppCompatActivity implements BeverageDetailView {
 
     @NonNull
-    public static final String BEVERAGE_INTENT_KEY = "BEVERAGE_INTENT_KEY";
+    public static final String BEVERAGE_MODEL_BUNDLE_KEY = "BEVERAGE_MODEL_BUNDLE_KEY";
 
     @Nullable
     TextView titleTextView;
@@ -32,61 +30,56 @@ public class BeverageActivity extends AppCompatActivity implements BeverageView 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beverage);
+        initializeViews();
 
-        BeverageViewPresenter presenter = new BeverageViewPresenter(this);
-        presenter.onCreate();
+        BeverageDetailViewPresenter presenter = new BeverageDetailViewPresenter(this);
+        presenter.onCreate(getIntent());
     }
 
-    @Override
     public void initializeViews() {
         titleTextView = (TextView) findViewById(R.id.text_title);
         descriptionTextView = (TextView) findViewById(R.id.text_description);
         imageView = (ImageView) findViewById(R.id.image_beverage);
     }
 
-    @Nullable
-    public Beverage getBeverageFromBundle() {
-        Intent intent = getIntent();
-        if (null != intent) {
-            Bundle extras = intent.getExtras();
-            if (null != extras) {
-                return extras.getParcelable(BEVERAGE_INTENT_KEY);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void showErrorText(@StringRes int message) {
+    void showErrorText() {
         if (null == titleTextView) {
             return;
         }
         titleTextView.setText(getString(R.string.error_unable_to_load_beverage));
     }
 
-    @Override
-    public void setTitle(@NonNull String name) {
+    void setTitle(@NonNull String name) {
         if (null == titleTextView) {
             return;
         }
         titleTextView.setText(name);
     }
 
-    @Override
-    public void setDescription(@NonNull String description) {
+    void setDescription(@NonNull String description) {
         if (null == descriptionTextView) {
             return;
         }
         descriptionTextView.setText(description);
     }
 
-    @Override
-    public void setImage(@NonNull String drawableResourceName) {
+    void setImage(@NonNull String drawableResourceName) {
         if (null == imageView) {
             return;
         }
-        Drawable image = ResourceUtils.getDrawableByName(this, drawableResourceName);
+        Drawable image = DrawableUtils.getDrawableByName(this, drawableResourceName);
         imageView.setImageDrawable(image);
+    }
+
+    @Override
+    public void displayBeverage(@Nullable Beverage beverage) {
+        if (null == beverage) {
+            showErrorText();
+        } else {
+            setTitle(beverage.getName());
+            setDescription(beverage.getDescription());
+            setImage(beverage.getDrawableResourceName());
+        }
     }
 
 }

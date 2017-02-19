@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.adapter.coffeeshops;
+package com.noralynn.coffeecompanion.coffeeshop;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.model.CoffeeShop;
 
 import java.util.Locale;
 
@@ -27,12 +26,8 @@ class CoffeeShopViewHolder extends ViewHolder {
     @NonNull
     private TextView mIsClosedTextView;
 
-    @NonNull
-    private Context mContext;
-
-    CoffeeShopViewHolder(@NonNull Context context, @NonNull View itemView) {
+    CoffeeShopViewHolder(@NonNull View itemView) {
         super(itemView);
-        mContext = context;
         mNameTextView = (TextView) itemView.findViewById(R.id.name_text);
         mDistanceTextView = (TextView) itemView.findViewById(R.id.distance_text);
         mRatingBar = (RatingBar) itemView.findViewById(R.id.rating);
@@ -40,9 +35,19 @@ class CoffeeShopViewHolder extends ViewHolder {
     }
 
     void bind(@NonNull CoffeeShop coffeeShop) {
+        Context context = itemView.getContext();
+
         mNameTextView.setText(coffeeShop.getName());
         mRatingBar.setRating((float)coffeeShop.getRating());
-        mIsClosedTextView.setText(coffeeShop.isClosed() ? mContext.getString(R.string.closed) : mContext.getString(R.string.open));
+
+        String availabilityMessage;
+        if (coffeeShop.isClosed()) {
+            availabilityMessage = context.getString(R.string.closed);
+        } else {
+            availabilityMessage = context.getString(R.string.open);
+        }
+        mIsClosedTextView.setText(availabilityMessage);
+
         double distance = coffeeShop.getDistance();
         if (distance != 0.0d) {
             mDistanceTextView.setVisibility(View.VISIBLE);

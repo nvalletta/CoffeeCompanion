@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.model;
+package com.noralynn.coffeecompanion.coffeeshop;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -46,22 +46,6 @@ public class CoffeeShop implements Parcelable {
         return isClosed;
     }
 
-
-    //////////////////////////////////////
-    //    Parcelable Implementation     //
-    //////////////////////////////////////
-
-    public static final Parcelable.Creator<CoffeeShop> CREATOR
-            = new Parcelable.Creator<CoffeeShop>() {
-        public CoffeeShop createFromParcel(Parcel in) {
-            return new CoffeeShop(in);
-        }
-
-        public CoffeeShop[] newArray(int size) {
-            return new CoffeeShop[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -81,4 +65,16 @@ public class CoffeeShop implements Parcelable {
         name = parcel.readString();
         isClosed = parcel.readByte() == 1;
     }
+
+    public static final Parcelable.Creator<CoffeeShop> CREATOR
+            = new Parcelable.Creator<CoffeeShop>() {
+        public CoffeeShop createFromParcel(Parcel in) {
+            return new CoffeeShop(in);
+        }
+
+        public CoffeeShop[] newArray(int size) {
+            return new CoffeeShop[size];
+        }
+    };
+
 }

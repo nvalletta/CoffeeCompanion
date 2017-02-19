@@ -1,10 +1,10 @@
-package com.noralynn.coffeecompanion.activity;
+package com.noralynn.coffeecompanion.beveragelist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-import com.noralynn.coffeecompanion.model.Beverage;
+import com.noralynn.coffeecompanion.common.Beverage;
 
 import java.util.List;
 
@@ -25,13 +25,18 @@ class BeverageListModel implements Parcelable {
         this.mBeverages = mBeverages;
     }
 
-
-    //////////////////////////////////////
-    //    Parcelable Implementation     //
-    //////////////////////////////////////
-
     private BeverageListModel(Parcel in) {
         mBeverages = in.createTypedArrayList(Beverage.CREATOR);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(mBeverages);
     }
 
     public static final Creator<BeverageListModel> CREATOR = new Creator<BeverageListModel>() {
@@ -45,14 +50,4 @@ class BeverageListModel implements Parcelable {
             return new BeverageListModel[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(mBeverages);
-    }
 }

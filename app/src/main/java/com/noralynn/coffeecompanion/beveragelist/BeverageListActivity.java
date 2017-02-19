@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.activity;
+package com.noralynn.coffeecompanion.beveragelist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,15 +15,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.adapter.beverages.BeverageAdapter;
-import com.noralynn.coffeecompanion.model.Beverage;
-
-import java.util.List;
+import com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity;
+import com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity;
+import com.noralynn.coffeecompanion.common.Beverage;
 
 public class BeverageListActivity extends AppCompatActivity implements BeverageListView {
 
     @NonNull
-    private static final String BEVERAGE_LIST_MODEL_BUNDLE_KEY = "BEVERAGE_LIST_MODEL_BUNDLE_KEY";
+    public static final String BEVERAGE_LIST_MODEL_BUNDLE_KEY = "BEVERAGE_LIST_MODEL_BUNDLE_KEY";
 
     @NonNull
     private BeverageListModel beverageListModel = new BeverageListModel();
@@ -35,32 +34,16 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     @Nullable
     private RecyclerView beverageRecyclerView;
 
-    @NonNull
-    private OnClickListener beverageClickListener = new OnClickListener() {
-        @Override
-        public void onClick(@NonNull View view) {
-            presenter.onClickBeverage(view);
-        }
-    };
-
-    @NonNull
-    private OnClickListener fabClickListener = new OnClickListener() {
-        @Override
-        public void onClick(@NonNull View view) {
-            presenter.onClickFloatingActionButton();
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeViews();
 
         presenter = new BeverageListViewPresenter(this);
         presenter.onCreate(savedInstanceState);
     }
 
-    @Override
     public void initializeViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,15 +51,12 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
         beverageRecyclerView = (RecyclerView) findViewById(R.id.beverages_recycler);
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(fabClickListener);
-    }
-
-    @Override
-    public int getRecyclerPositionForView(@NonNull View view) {
-        if (null == beverageRecyclerView) {
-            return -1;
-        }
-        return beverageRecyclerView.getChildAdapterPosition(view);
+        floatingActionButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.onClickFloatingActionButton();
+            }
+        });
     }
 
     @Override
@@ -87,8 +67,8 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
 
     @Override
     public void startBeverageActivity(@NonNull Beverage beverage) {
-        Intent beverageActivityIntent = new Intent(BeverageListActivity.this, BeverageActivity.class);
-        beverageActivityIntent.putExtra(BeverageActivity.BEVERAGE_INTENT_KEY, beverage);
+        Intent beverageActivityIntent = new Intent(BeverageListActivity.this, BeverageDetailActivity.class);
+        beverageActivityIntent.putExtra(BeverageDetailActivity.BEVERAGE_MODEL_BUNDLE_KEY, beverage);
         startActivity(beverageActivityIntent);
     }
 
@@ -98,11 +78,6 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
         startActivity(coffeeShopActivityIntent);
     }
 
-    @Override
-    public BeverageListModel getSavedBeverageListModel(@NonNull Bundle savedInstanceState) {
-        return savedInstanceState.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
-    }
-
     @NonNull
     @Override
     public Context getContext() {
@@ -110,15 +85,10 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     }
 
     @Override
-    public void setModel(@NonNull BeverageListModel beverageListModel) {
+    public void displayBeverages(@NonNull BeverageListModel beverageListModel) {
         this.beverageListModel = beverageListModel;
-    }
-
-    @Override
-    public void displayBeverages(@NonNull List<Beverage> beverages) {
         if (null != beverageRecyclerView) {
-            BeverageAdapter adapter = new BeverageAdapter(this, beverages);
-            adapter.setClickListener(beverageClickListener);
+            BeverageAdapter adapter = new BeverageAdapter(presenter, beverageListModel.getBeverages());
             beverageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             beverageRecyclerView.setAdapter(adapter);
         }

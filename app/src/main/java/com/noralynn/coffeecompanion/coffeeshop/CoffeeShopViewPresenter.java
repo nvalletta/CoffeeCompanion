@@ -1,6 +1,5 @@
-package com.noralynn.coffeecompanion.activity;
+package com.noralynn.coffeecompanion.coffeeshop;
 
-import android.Manifest;
 import android.Manifest.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -10,11 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.model.CoffeeShop;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
@@ -30,8 +27,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.content.Context.LOCATION_SERVICE;
+import static com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity.COFFEE_SHOPS_BUNDLE_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_SECRET;
 import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN;
@@ -39,8 +36,6 @@ import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN_SECRET;
 
 
 class CoffeeShopViewPresenter {
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     @NonNull
     private CoffeeShopView coffeeShopView;
@@ -65,82 +60,29 @@ class CoffeeShopViewPresenter {
         }
     };
 
-    @NonNull
-    private String[] locationPermissions = new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
-
-    CoffeeShopViewPresenter(@NonNull CoffeeShopView coffeeShopView) {
+    CoffeeShopViewPresenter(@NonNull CoffeeShopView coffeeShopView, boolean hasLocationPermission) {
         this.coffeeShopView = coffeeShopView;
         coffeeShopModel = new CoffeeShopModel();
+        coffeeShopModel.setHasLocationPermission(hasLocationPermission);
     }
 
     void onCreate(Bundle savedInstanceState) {
-        coffeeShopView.initializeViews();
         coffeeShopModel = getBundledCoffeeShopModel(savedInstanceState);
-        showListOfNearbyCoffeeShops();
-    }
-
-    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE || permissions.length == 0) {
-            return;
-        }
-
-        boolean canAccessLocation = canAccessLocation(permissions, grantResults);
-        coffeeShopModel.setHasLocationPermission(canAccessLocation);
-        coffeeShopView.setModel(coffeeShopModel);
 
         if (coffeeShopModel.hasLocationPermission()) {
-            sendYelpCoffeeShopSearchRequest();
+            coffeeShopView.displayCoffeeShops(coffeeShopModel);
         } else {
-            coffeeShopView.showMessage(R.string.error_cannot_get_device_location);
+            coffeeShopView.displayPermissionRequest();
         }
-    }
-
-    private boolean canAccessLocation(@NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (permissions.length != 0) {
-            String permission = permissions[0];
-            if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                if (grantResults.length != 0) {
-                    int grantResult = grantResults[0];
-                    coffeeShopModel.setHasLocationPermission(grantResult == PackageManager.PERMISSION_GRANTED);
-                    return coffeeShopModel.hasLocationPermission();
-                }
-            }
-        }
-        return false;
     }
 
     @NonNull
     private CoffeeShopModel getBundledCoffeeShopModel(@Nullable Bundle savedInstanceState) {
         CoffeeShopModel model = null;
         if (null != savedInstanceState) {
-            model = coffeeShopView.getSavedCoffeeShopModel(savedInstanceState);
+            model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
         }
         return model != null ? model : new CoffeeShopModel();
-    }
-
-    private void showListOfNearbyCoffeeShops() {
-        List<CoffeeShop> coffeeShops = coffeeShopModel.getCoffeeShops();
-        if (coffeeShops == null || coffeeShops.size() == 0) {
-            if (locationPermissionHasBeenGranted()) {
-                sendYelpCoffeeShopSearchRequest();
-            } else {
-                coffeeShopView.requestPermission(LOCATION_PERMISSION_REQUEST_CODE, locationPermissions);
-            }
-        } else {
-            coffeeShopView.setModel(coffeeShopModel);
-            coffeeShopView.displayCoffeeShops(coffeeShops);
-        }
-    }
-
-    private boolean locationPermissionHasBeenGranted() {
-        int permission = ContextCompat.checkSelfPermission(
-                coffeeShopView.getContext(),
-                ACCESS_COARSE_LOCATION
-        );
-
-        return permission == PackageManager.PERMISSION_GRANTED;
     }
 
     private void sendYelpCoffeeShopSearchRequest() {
@@ -169,8 +111,7 @@ class CoffeeShopViewPresenter {
         }
 
         coffeeShopModel.setCoffeeShops(coffeeShops);
-        coffeeShopView.setModel(coffeeShopModel);
-        coffeeShopView.displayCoffeeShops(coffeeShops);
+        coffeeShopView.displayCoffeeShops(coffeeShopModel);
     }
 
     @Nullable
@@ -213,5 +154,15 @@ class CoffeeShopViewPresenter {
         }
 
         return manager.getLastKnownLocation(locationProvider);
+    }
+
+    void onPermissionGranted() {
+        coffeeShopModel.setHasLocationPermission(true);
+        sendYelpCoffeeShopSearchRequest();
+    }
+
+    void onRequestPermissionFailed() {
+        coffeeShopModel.setHasLocationPermission(false);
+        coffeeShopView.showPermissionError();
     }
 }

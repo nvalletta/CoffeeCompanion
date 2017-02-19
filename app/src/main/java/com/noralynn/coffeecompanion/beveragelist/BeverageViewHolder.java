@@ -1,6 +1,5 @@
-package com.noralynn.coffeecompanion.adapter.beverages;
+package com.noralynn.coffeecompanion.beveragelist;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -9,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.model.Beverage;
-import com.noralynn.coffeecompanion.utils.ResourceUtils;
+import com.noralynn.coffeecompanion.common.Beverage;
+import com.noralynn.coffeecompanion.common.DrawableUtils;
 
 
 class BeverageViewHolder extends ViewHolder {
@@ -27,9 +26,9 @@ class BeverageViewHolder extends ViewHolder {
         mIconImageView = (ImageView) itemView.findViewById(R.id.image_icon);
     }
 
-    void bind(@NonNull Context context, @NonNull Beverage beverage) {
+    void bind(@NonNull Beverage beverage) {
         mTitleTextView.setText(beverage.getName());
-        Drawable icon = ResourceUtils.getDrawableByName(context, beverage.getDrawableResourceName());
+        Drawable icon = DrawableUtils.getDrawableByName(itemView.getContext(), beverage.getDrawableResourceName());
         mIconImageView.setImageDrawable(icon);
     }
 

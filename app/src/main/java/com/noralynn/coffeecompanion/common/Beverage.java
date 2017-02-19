@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.model;
+package com.noralynn.coffeecompanion.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -36,22 +36,6 @@ public class Beverage implements Parcelable {
         return drawableResourceName;
     }
 
-
-    //////////////////////////////////////
-    //    Parcelable Implementation     //
-    //////////////////////////////////////
-
-    public static final Parcelable.Creator<Beverage> CREATOR
-            = new Parcelable.Creator<Beverage>() {
-        public Beverage createFromParcel(Parcel in) {
-            return new Beverage(in);
-        }
-
-        public Beverage[] newArray(int size) {
-            return new Beverage[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -69,5 +53,16 @@ public class Beverage implements Parcelable {
         description = parcel.readString();
         drawableResourceName = parcel.readString();
     }
+
+    public static final Parcelable.Creator<Beverage> CREATOR
+            = new Parcelable.Creator<Beverage>() {
+        public Beverage createFromParcel(Parcel in) {
+            return new Beverage(in);
+        }
+
+        public Beverage[] newArray(int size) {
+            return new Beverage[size];
+        }
+    };
 
 }
