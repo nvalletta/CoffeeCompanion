@@ -8,12 +8,12 @@ import com.noralynn.coffeecompanion.common.Beverage;
 
 import java.util.List;
 
-class BeverageListModel implements Parcelable {
+public class BeverageListModel implements Parcelable {
 
     @Nullable
     private List<Beverage> mBeverages;
 
-    BeverageListModel() {
+    public BeverageListModel() {
     }
 
     @Nullable

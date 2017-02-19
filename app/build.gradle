@@ -28,8 +28,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
 
     // GSON
     compile 'com.google.code.gson:gson:2.8.0'
@@ -49,9 +49,9 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
 
     // Tell our test APK to use the following v25.1.0 dependencies in order to avoid conflicts:
-    androidTestCompile 'com.android.support:support-v4:25.1.0'
-    androidTestCompile 'com.android.support:recyclerview-v7:25.1.0'
-    androidTestCompile 'com.android.support:appcompat-v7:25.1.0'
-    androidTestCompile 'com.android.support:design:25.1.0'
+    androidTestCompile 'com.android.support:support-v4:25.1.1'
+    androidTestCompile 'com.android.support:recyclerview-v7:25.1.1'
+    androidTestCompile 'com.android.support:appcompat-v7:25.1.1'
+    androidTestCompile 'com.android.support:design:25.1.1'
 
 }
