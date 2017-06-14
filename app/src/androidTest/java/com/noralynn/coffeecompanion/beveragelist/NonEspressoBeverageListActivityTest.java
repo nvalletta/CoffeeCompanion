@@ -21,7 +21,8 @@ public class NonEspressoBeverageListActivityTest {
     @Test
     public void testBeverageClick_without_Espresso_shouldOpenBeverageDetailActivity() throws Throwable {
         // Setup
-        ActivityMonitor activityMonitor = getInstrumentation().addMonitor(BeverageDetailActivity.class.getName(), null, false);
+        ActivityMonitor activityMonitor = getInstrumentation()
+                .addMonitor(BeverageDetailActivity.class.getName(), null, false);
         BeverageListActivity activity = activityTestRule.getActivity();
         final RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.beverages_recycler);
 
@@ -34,7 +35,8 @@ public class NonEspressoBeverageListActivityTest {
         });
 
         // Verify
-        BeverageDetailActivity beverageDetailActivity = (BeverageDetailActivity) getInstrumentation().waitForMonitorWithTimeout(activityMonitor, 2000);
+        BeverageDetailActivity beverageDetailActivity = (BeverageDetailActivity) getInstrumentation()
+                .waitForMonitorWithTimeout(activityMonitor, 2000);
         assertNotNull(beverageDetailActivity);
         beverageDetailActivity.finish();
     }
