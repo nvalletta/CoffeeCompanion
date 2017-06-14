@@ -19,6 +19,8 @@ import com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity;
 import com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity;
 import com.noralynn.coffeecompanion.common.Beverage;
 
+import static com.noralynn.coffeecompanion.R.id.fab;
+
 public class BeverageListActivity extends AppCompatActivity implements BeverageListView {
 
     @NonNull
@@ -50,7 +52,7 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
 
         beverageRecyclerView = (RecyclerView) findViewById(R.id.beverages_recycler);
 
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(fab);
         floatingActionButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

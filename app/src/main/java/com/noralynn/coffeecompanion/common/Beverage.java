@@ -65,4 +65,12 @@ public class Beverage implements Parcelable {
         }
     };
 
+    public static Beverage mock() {
+        return new Beverage(
+                "Title",
+                "Description",
+                "ic_cafe_mocha"
+        );
+    }
+
 }
