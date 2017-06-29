@@ -14,6 +14,8 @@ interface CoffeeShopView {
 
     void displayCoffeeShops(@NonNull CoffeeShopModel coffeeShopModel);
 
+    void shareCoffeeShop(@NonNull String message);
+
     void requestPermission(int requestCode, @NonNull String[] permissions);
 
     @NonNull

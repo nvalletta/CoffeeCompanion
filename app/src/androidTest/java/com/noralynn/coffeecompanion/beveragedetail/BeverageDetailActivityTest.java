@@ -28,36 +28,43 @@ public class BeverageDetailActivityTest {
     private static final Beverage beverage = Beverage.mock();
 
     @Rule
-    public ActivityTestRule<BeverageDetailActivity> activityRule =
+    public ActivityTestRule<BeverageDetailActivity> activityTestRule =
         new ActivityTestRule<BeverageDetailActivity>(BeverageDetailActivity.class) {
             @Override
             protected Intent getActivityIntent() {
-                Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+                Context targetContext = InstrumentationRegistry
+                        .getInstrumentation()
+                        .getTargetContext();
                 Intent result = new Intent(targetContext, BeverageDetailActivity.class);
                 result.putExtra(BEVERAGE_MODEL_BUNDLE_KEY, beverage);
                 return result;
             }
         };
 
+
     @Test
     public void testTitle_shouldBePositionedAboveBeverageImageView() {
         onView(withId(R.id.text_title)).check(isAbove(withId(R.id.image_beverage)));
     }
+
 
     @Test
     public void testDescription_shouldBeSetToCorrectBeverageDescriptionText() {
         onView(withId(R.id.text_description)).check(matches(withText(beverage.getDescription())));
     }
 
+
     @Test
     public void testImage_shouldBeDisplayed() {
         onView(withId(R.id.image_beverage)).check(matches(isDisplayed()));
     }
 
+
     @Test
     public void testDescription_shouldNotContainEllipsizedText() {
         onView(withId(R.id.text_description)).check(noEllipsizedText());
     }
+
 
     @Test
     public void testBeverageDetailActivity_shouldNotHaveAnyOverlaps() {

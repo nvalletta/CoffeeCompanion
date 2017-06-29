@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 
 import com.yelp.clientlib.entities.Business;
 
+import java.util.Locale;
+
 public class CoffeeShop implements Parcelable {
 
     private double rating;
@@ -77,4 +79,8 @@ public class CoffeeShop implements Parcelable {
         }
     };
 
+    @NonNull
+    String getHumanReadableDistance() {
+        return String.format(Locale.getDefault(), "%1$,.2f mi", distance);
+    }
 }

@@ -14,7 +14,7 @@ import com.noralynn.coffeecompanion.common.Beverage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
+class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
 
     @Nullable
     private List<Beverage> beverages = new ArrayList<>();
@@ -22,7 +22,7 @@ public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
     @NonNull
     private BeverageListViewPresenter presenter;
 
-    public BeverageAdapter(@NonNull BeverageListViewPresenter presenter, @Nullable List<Beverage> beverages) {
+    BeverageAdapter(@NonNull BeverageListViewPresenter presenter, @Nullable List<Beverage> beverages) {
         this.beverages = beverages;
         this.presenter = presenter;
     }
@@ -45,6 +45,9 @@ public class BeverageAdapter extends RecyclerView.Adapter<BeverageViewHolder> {
 
     @Override
     public void onBindViewHolder(BeverageViewHolder holder, int position) {
+        if (null == beverages) {
+            return;
+        }
         Beverage beverage = beverages.get(position);
         holder.bind(beverage);
     }

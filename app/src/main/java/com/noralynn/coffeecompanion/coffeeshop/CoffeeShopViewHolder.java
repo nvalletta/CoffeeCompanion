@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
 
-import java.util.Locale;
-
 
 class CoffeeShopViewHolder extends ViewHolder {
 
@@ -51,7 +49,7 @@ class CoffeeShopViewHolder extends ViewHolder {
         double distance = coffeeShop.getDistance();
         if (distance != 0.0d) {
             mDistanceTextView.setVisibility(View.VISIBLE);
-            mDistanceTextView.setText(String.format(Locale.getDefault(), "%1$,.2f mi", coffeeShop.getDistance()));
+            mDistanceTextView.setText(coffeeShop.getHumanReadableDistance());
         } else {
             mDistanceTextView.setVisibility(View.GONE);
         }

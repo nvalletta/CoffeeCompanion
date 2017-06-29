@@ -1,5 +1,8 @@
 package com.noralynn.coffeecompanion.beveragelist;
 
+import android.app.Activity;
+import android.app.Instrumentation.ActivityResult;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -11,10 +14,12 @@ import android.view.View;
 
 import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity;
+import com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity;
 import com.noralynn.coffeecompanion.common.Beverage;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -22,6 +27,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -36,6 +42,20 @@ public class BeverageListActivityTest {
 
     @Rule
     public IntentsTestRule<BeverageListActivity> intentsTestRule = new IntentsTestRule<>(BeverageListActivity.class);
+
+    @Before
+    public void stubCoffeeShopActivityIntent() {
+        Intent intent = new Intent();
+        ActivityResult coffeeShopActivityResult = new ActivityResult(Activity.RESULT_OK, intent);
+        intending(hasComponent(CoffeeShopActivity.class.getName())).respondWith(coffeeShopActivityResult);
+    }
+
+    @Test
+    public void testMapFabClick_shouldOpenCoffeeShopActivity() {
+        onView(withId(R.id.map_fab)).perform(click());
+
+        intended(hasComponent(CoffeeShopActivity.class.getName()));
+    }
 
 
     @Test
@@ -52,7 +72,7 @@ public class BeverageListActivityTest {
 
     @Test
     public void testMapFloatingActionButton_shouldBeDisplayed() {
-        onView(withId(R.id.fab)).check(matches(isDisplayed()));
+        onView(withId(R.id.map_fab)).check(matches(isDisplayed()));
     }
 
 

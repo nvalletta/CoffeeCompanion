@@ -38,9 +38,9 @@ public class BeverageListViewPresenter {
     @NonNull
     private BeverageListView beverageListView;
 
-    BeverageListViewPresenter(@NonNull BeverageListView beverageListView) {
+    BeverageListViewPresenter(@NonNull BeverageListView beverageListView, @NonNull BeverageListModel beverageListModel) {
         this.beverageListView = beverageListView;
-        beverageListModel = new BeverageListModel();
+        this.beverageListModel = beverageListModel;
     }
 
     void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,4 +116,8 @@ public class BeverageListViewPresenter {
         return null;
     }
 
+    @NonNull
+    public BeverageListModel getBeverageListModel() {
+        return beverageListModel;
+    }
 }

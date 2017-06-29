@@ -13,7 +13,9 @@ class CoffeeShopModel implements Parcelable {
 
     private boolean hasLocationPermission;
 
-    CoffeeShopModel() { }
+    CoffeeShopModel(boolean hasLocationPermission) {
+        this.hasLocationPermission = hasLocationPermission;
+    }
 
     @Nullable
     List<CoffeeShop> getCoffeeShops() {
@@ -32,7 +34,7 @@ class CoffeeShopModel implements Parcelable {
         this.hasLocationPermission = hasLocationPermission;
     }
 
-    private CoffeeShopModel(Parcel in) {
+    CoffeeShopModel(Parcel in) {
         coffeeShops = in.createTypedArrayList(CoffeeShop.CREATOR);
         hasLocationPermission = in.readByte() != 0;
     }

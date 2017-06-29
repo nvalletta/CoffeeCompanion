@@ -2,6 +2,7 @@ package com.noralynn.coffeecompanion.coffeeshop;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.noralynn.coffeecompanion.R;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static com.noralynn.coffeecompanion.beveragelist.BeverageListActivity.BEVERAGE_LIST_MODEL_BUNDLE_KEY;
 
 public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopView {
 
@@ -28,9 +30,6 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     public static final String COFFEE_SHOPS_BUNDLE_KEY = "COFFEE_SHOPS_BUNDLE_KEY";
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
-    @Nullable
-    private CoffeeShopModel coffeeShopModel;
 
     @SuppressWarnings("NullableProblems")
     @NonNull
@@ -56,8 +55,16 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         setContentView(R.layout.activity_coffee_shops);
         initializeViews();
 
-        presenter = new CoffeeShopViewPresenter(this, locationPermissionHasBeenGranted());
-        presenter.onCreate(savedInstanceState);
+        CoffeeShopModel model = null;
+        if (null != savedInstanceState) {
+            model = savedInstanceState.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
+        }
+        if (null == model) {
+            model = new CoffeeShopModel(locationPermissionHasBeenGranted());
+        }
+
+        presenter = new CoffeeShopViewPresenter(this, model);
+        presenter.onCreate();
     }
 
     public void initializeViews() {
@@ -68,18 +75,16 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(COFFEE_SHOPS_BUNDLE_KEY, coffeeShopModel);
+        outState.putParcelable(COFFEE_SHOPS_BUNDLE_KEY, presenter.getCoffeeShopModel());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void displayCoffeeShops(@NonNull CoffeeShopModel model) {
-        coffeeShopModel = model;
-
         hideProgressBar();
         hideEmptyTextView();
 
-        List<CoffeeShop> coffeeShops = coffeeShopModel.getCoffeeShops();
+        List<CoffeeShop> coffeeShops = model.getCoffeeShops();
         CoffeeShopAdapter coffeeShopAdapter = new CoffeeShopAdapter(presenter, coffeeShops);
         if (null != coffeeShopRecyclerView) {
             coffeeShopRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -110,6 +115,14 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void shareCoffeeShop(@NonNull String message) {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_title)));
     }
 
     @Override

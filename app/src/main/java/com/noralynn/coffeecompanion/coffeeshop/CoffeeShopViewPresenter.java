@@ -4,6 +4,7 @@ import android.Manifest.permission;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,7 +29,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
-import static com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity.COFFEE_SHOPS_BUNDLE_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_SECRET;
 import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN;
@@ -55,37 +55,41 @@ class CoffeeShopViewPresenter {
 
         @Override
         public void onFailure(Call<SearchResponse> call, Throwable t) {
-            Log.d("CoffeeShop", "onFailure() called with: call = [" + call + "], t = [" + t + "]");
+            Log.e("CoffeeShop", "onFailure()", t);
             coffeeShopView.showMessage(R.string.error_unable_to_load_coffee_shops);
         }
     };
 
-    CoffeeShopViewPresenter(@NonNull CoffeeShopView coffeeShopView, boolean hasLocationPermission) {
+    CoffeeShopViewPresenter(@NonNull CoffeeShopView coffeeShopView, @NonNull CoffeeShopModel coffeeShopModel) {
         this.coffeeShopView = coffeeShopView;
-        coffeeShopModel = new CoffeeShopModel();
-        coffeeShopModel.setHasLocationPermission(hasLocationPermission);
+        this.coffeeShopModel = coffeeShopModel;
     }
 
-    void onCreate(Bundle savedInstanceState) {
-        coffeeShopModel = getBundledCoffeeShopModel(savedInstanceState);
-
-        if (coffeeShopModel.hasLocationPermission()) {
-            coffeeShopView.displayCoffeeShops(coffeeShopModel);
-        } else {
+    void onCreate() {
+        if (!coffeeShopModel.hasLocationPermission()) {
             coffeeShopView.displayPermissionRequest();
+        } else {
+            onPermissionGranted();
         }
     }
 
-    @NonNull
-    private CoffeeShopModel getBundledCoffeeShopModel(@Nullable Bundle savedInstanceState) {
-        CoffeeShopModel model = null;
-        if (null != savedInstanceState) {
-            model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
-        }
-        return model != null ? model : new CoffeeShopModel();
+    void onClickCoffeeShop(@NonNull CoffeeShop coffeeShop) {
+        coffeeShopView.shareCoffeeShop(
+            "Check out this coffee shop I found called " + coffeeShop.getName() +
+            ". It's only " + coffeeShop.getHumanReadableDistance() + " away!"
+        );
     }
 
     private void sendYelpCoffeeShopSearchRequest() {
+        // First, let's see if we can get our coordinates. If not, we'll have to listen
+        // for changes in device Location, because the device may not have registered
+        // a Location update yet.
+        CoordinateOptions coordinateOptions = getCoordinateOptions();
+        if (null == coordinateOptions) {
+            listenForLocationUpdates();
+            return;
+        }
+
         YelpAPIFactory apiFactory = new YelpAPIFactory(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET);
         YelpAPI yelpAPI = apiFactory.createAPI();
 
@@ -93,7 +97,7 @@ class CoffeeShopViewPresenter {
         params.put("category_filter", "coffee");
         params.put("sort", "1");
 
-        Call<SearchResponse> call = yelpAPI.search(getCoordinateOptions(), params);
+        Call<SearchResponse> call = yelpAPI.search(coordinateOptions, params);
 
         call.enqueue(coffeeShopSearchCallback);
     }
@@ -118,6 +122,7 @@ class CoffeeShopViewPresenter {
     private CoordinateOptions getCoordinateOptions() {
         Location location = getCurrentLocation();
         if (null == location) {
+            listenForLocationUpdates();
             return null;
         }
 
@@ -135,25 +140,63 @@ class CoffeeShopViewPresenter {
     @Nullable
     private Location getCurrentLocation() {
         Context context = coffeeShopView.getContext();
-        // Sanity check. Make sure we really do have permission before trying to access location!
+        // Make sure we really do have permission before trying to access location!
         if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("CoffeeShopActivity", "We don't have permission to get the current device location...");
             return null;
         }
 
         // Get the user's current location
         LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        String locationProvider = getLocationProvider(manager);
+        if (null == locationProvider) {
+            return null;
+        }
+
+        return manager.getLastKnownLocation(locationProvider);
+    }
+
+    private String getLocationProvider(@NonNull LocationManager manager) {
         String locationProvider = null;
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationProvider = LocationManager.GPS_PROVIDER;
         } else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationProvider = LocationManager.NETWORK_PROVIDER;
         }
+        return locationProvider;
+    }
 
-        if (null == locationProvider) {
-            return null;
+    private void listenForLocationUpdates() {
+        Context context = coffeeShopView.getContext();
+        final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("CoffeeShopActivity", "We don't have permission to listen to the current device location...");
+            return;
         }
 
-        return manager.getLastKnownLocation(locationProvider);
+        manager.requestLocationUpdates(getLocationProvider(manager), 60000, 10, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                sendYelpCoffeeShopSearchRequest();
+                manager.removeUpdates(this);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        });
     }
 
     void onPermissionGranted() {
@@ -164,5 +207,10 @@ class CoffeeShopViewPresenter {
     void onRequestPermissionFailed() {
         coffeeShopModel.setHasLocationPermission(false);
         coffeeShopView.showPermissionError();
+    }
+
+    @NonNull
+    CoffeeShopModel getCoffeeShopModel() {
+        return coffeeShopModel;
     }
 }
