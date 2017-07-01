@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.net.Uri;
 import android.os.Parcel;

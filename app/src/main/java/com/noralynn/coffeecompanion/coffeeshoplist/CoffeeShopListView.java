@@ -1,10 +1,10 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
-interface CoffeeShopView {
+interface CoffeeShopListView {
 
     void showPermissionError();
 
@@ -14,7 +14,7 @@ interface CoffeeShopView {
 
     void showMessage(@StringRes int message);
 
-    void displayCoffeeShops(@NonNull CoffeeShopModel coffeeShopModel);
+    void displayCoffeeShops(@NonNull CoffeeShopListModel coffeeShopListModel);
 
     void requestPermission(int requestCode, @NonNull String[] permissions);
 

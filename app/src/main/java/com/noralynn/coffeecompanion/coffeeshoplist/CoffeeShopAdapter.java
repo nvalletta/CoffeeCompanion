@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,12 +16,12 @@ import java.util.List;
 class CoffeeShopAdapter extends RecyclerView.Adapter<CoffeeShopViewHolder> {
 
     @NonNull
-    private CoffeeShopViewPresenter presenter;
+    private CoffeeShopListViewPresenter presenter;
 
     @Nullable
     private List<CoffeeShop> coffeeShops = new ArrayList<>();
 
-    CoffeeShopAdapter(@NonNull CoffeeShopViewPresenter presenter, @Nullable List<CoffeeShop> coffeeShops) {
+    CoffeeShopAdapter(@NonNull CoffeeShopListViewPresenter presenter, @Nullable List<CoffeeShop> coffeeShops) {
         this.presenter = presenter;
         this.coffeeShops = coffeeShops;
     }

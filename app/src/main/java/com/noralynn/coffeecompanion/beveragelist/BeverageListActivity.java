@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 
 import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity;
-import com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity;
+import com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShopListActivity;
 import com.noralynn.coffeecompanion.common.Beverage;
 
 import static com.noralynn.coffeecompanion.R.id.map_fab;
@@ -87,7 +87,7 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
 
     @Override
     public void startCoffeeShopActivity() {
-        Intent coffeeShopActivityIntent = new Intent(this, CoffeeShopActivity.class);
+        Intent coffeeShopActivityIntent = new Intent(this, CoffeeShopListActivity.class);
         startActivity(coffeeShopActivityIntent);
     }
 

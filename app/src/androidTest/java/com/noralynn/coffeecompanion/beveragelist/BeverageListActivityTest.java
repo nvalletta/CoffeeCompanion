@@ -14,7 +14,7 @@ import android.view.View;
 
 import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity;
-import com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity;
+import com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShopListActivity;
 import com.noralynn.coffeecompanion.common.Beverage;
 
 import org.hamcrest.Description;
@@ -47,14 +47,14 @@ public class BeverageListActivityTest {
     public void stubCoffeeShopActivityIntent() {
         Intent intent = new Intent();
         ActivityResult coffeeShopActivityResult = new ActivityResult(Activity.RESULT_OK, intent);
-        intending(hasComponent(CoffeeShopActivity.class.getName())).respondWith(coffeeShopActivityResult);
+        intending(hasComponent(CoffeeShopListActivity.class.getName())).respondWith(coffeeShopActivityResult);
     }
 
     @Test
     public void testMapFabClick_shouldOpenCoffeeShopActivity() {
         onView(withId(R.id.map_fab)).perform(click());
 
-        intended(hasComponent(CoffeeShopActivity.class.getName()));
+        intended(hasComponent(CoffeeShopListActivity.class.getName()));
     }
 
 

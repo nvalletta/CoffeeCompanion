@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.noralynn.coffeecompanion.coffeeshop.CoffeeShop;
+import com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShop;
 
 import static com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity.COFFEE_SHOP_BUNDLE_KEY;
 

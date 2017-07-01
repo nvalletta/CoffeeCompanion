@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,14 +6,14 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
-class CoffeeShopModel implements Parcelable {
+class CoffeeShopListModel implements Parcelable {
 
     @Nullable
     private List<CoffeeShop> coffeeShops;
 
     private boolean hasLocationPermission;
 
-    CoffeeShopModel(boolean hasLocationPermission) {
+    CoffeeShopListModel(boolean hasLocationPermission) {
         this.hasLocationPermission = hasLocationPermission;
     }
 
@@ -34,7 +34,7 @@ class CoffeeShopModel implements Parcelable {
         this.hasLocationPermission = hasLocationPermission;
     }
 
-    CoffeeShopModel(Parcel in) {
+    CoffeeShopListModel(Parcel in) {
         coffeeShops = in.createTypedArrayList(CoffeeShop.CREATOR);
         hasLocationPermission = in.readByte() != 0;
     }
@@ -50,15 +50,15 @@ class CoffeeShopModel implements Parcelable {
         dest.writeByte((byte)(hasLocationPermission ? 1 : 0));
     }
 
-    public static final Creator<CoffeeShopModel> CREATOR = new Creator<CoffeeShopModel>() {
+    public static final Creator<CoffeeShopListModel> CREATOR = new Creator<CoffeeShopListModel>() {
         @Override
-        public CoffeeShopModel createFromParcel(Parcel in) {
-            return new CoffeeShopModel(in);
+        public CoffeeShopListModel createFromParcel(Parcel in) {
+            return new CoffeeShopListModel(in);
         }
 
         @Override
-        public CoffeeShopModel[] newArray(int size) {
-            return new CoffeeShopModel[size];
+        public CoffeeShopListModel[] newArray(int size) {
+            return new CoffeeShopListModel[size];
         }
     };
 }

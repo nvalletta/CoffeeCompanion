@@ -3,7 +3,7 @@ package com.noralynn.coffeecompanion.cofeeshopdetail;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.noralynn.coffeecompanion.coffeeshop.CoffeeShop;
+import com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShop;
 
 class CoffeeShopDetailModel {
 

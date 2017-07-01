@@ -5,7 +5,7 @@
     android:id="@+id/activity_coffee_shops"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.noralynn.coffeecompanion.coffeeshop.CoffeeShopActivity">
+    tools:context="com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShopListActivity">
 
     <ProgressBar
         android:id="@+id/progress_bar"

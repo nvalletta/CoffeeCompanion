@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.Manifest;
 import android.content.Context;
@@ -27,7 +27,7 @@ import java.util.List;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity.COFFEE_SHOP_BUNDLE_KEY;
 
-public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopView {
+public class CoffeeShopListActivity extends AppCompatActivity implements CoffeeShopListView {
 
     @NonNull
     public static final String COFFEE_SHOPS_BUNDLE_KEY = "COFFEE_SHOPS_BUNDLE_KEY";
@@ -36,7 +36,7 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
 
     @SuppressWarnings("NullableProblems")
     @NonNull
-    private CoffeeShopViewPresenter presenter;
+    private CoffeeShopListViewPresenter presenter;
 
     @Nullable
     private RecyclerView coffeeShopRecyclerView;
@@ -61,7 +61,7 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         setContentView(R.layout.activity_coffee_shops);
         initializeViews();
 
-        CoffeeShopModel model = null;
+        CoffeeShopListModel model = null;
         if (null != savedInstanceState) {
             model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
         }
@@ -72,10 +72,10 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         }
 
         if (null == model) {
-            model = new CoffeeShopModel(locationPermissionHasBeenGranted());
+            model = new CoffeeShopListModel(locationPermissionHasBeenGranted());
         }
 
-        presenter = new CoffeeShopViewPresenter(this, model);
+        presenter = new CoffeeShopListViewPresenter(this, model);
         presenter.onCreate();
     }
 
@@ -103,12 +103,12 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(COFFEE_SHOPS_BUNDLE_KEY, presenter.getCoffeeShopModel());
+        outState.putParcelable(COFFEE_SHOPS_BUNDLE_KEY, presenter.getCoffeeShopListModel());
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    public void displayCoffeeShops(@NonNull CoffeeShopModel model) {
+    public void displayCoffeeShops(@NonNull CoffeeShopListModel model) {
         hideProgressBar();
         hideEmptyTextView();
 

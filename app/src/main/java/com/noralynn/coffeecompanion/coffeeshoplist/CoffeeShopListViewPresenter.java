@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.Manifest.permission;
 import android.content.Context;
@@ -35,13 +35,13 @@ import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN;
 import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN_SECRET;
 
 
-class CoffeeShopViewPresenter {
+class CoffeeShopListViewPresenter {
 
     @NonNull
-    private CoffeeShopView coffeeShopView;
+    private CoffeeShopListView coffeeShopListView;
 
     @NonNull
-    private CoffeeShopModel coffeeShopModel;
+    private CoffeeShopListModel coffeeShopListModel;
 
     @NonNull
     private Callback<SearchResponse> coffeeShopSearchCallback = new Callback<SearchResponse>() {
@@ -56,24 +56,24 @@ class CoffeeShopViewPresenter {
         @Override
         public void onFailure(Call<SearchResponse> call, Throwable t) {
             Log.e("CoffeeShop", "onFailure()", t);
-            coffeeShopView.showMessage(R.string.error_unable_to_load_coffee_shops);
+            coffeeShopListView.showMessage(R.string.error_unable_to_load_coffee_shops);
         }
     };
 
-    CoffeeShopViewPresenter(@NonNull CoffeeShopView coffeeShopView, @NonNull CoffeeShopModel coffeeShopModel) {
-        this.coffeeShopView = coffeeShopView;
-        this.coffeeShopModel = coffeeShopModel;
+    CoffeeShopListViewPresenter(@NonNull CoffeeShopListView coffeeShopListView, @NonNull CoffeeShopListModel coffeeShopListModel) {
+        this.coffeeShopListView = coffeeShopListView;
+        this.coffeeShopListModel = coffeeShopListModel;
     }
 
     void onCreate() {
-        if (coffeeShopModel.getCoffeeShops() != null) {
+        if (coffeeShopListModel.getCoffeeShops() != null) {
             // We already have our coffee shops; just return.
-            coffeeShopView.displayCoffeeShops(coffeeShopModel);
+            coffeeShopListView.displayCoffeeShops(coffeeShopListModel);
             return;
         }
 
-        if (!coffeeShopModel.hasLocationPermission()) {
-            coffeeShopView.displayPermissionRequest();
+        if (!coffeeShopListModel.hasLocationPermission()) {
+            coffeeShopListView.displayPermissionRequest();
         } else {
             onPermissionGranted();
         }
@@ -103,7 +103,7 @@ class CoffeeShopViewPresenter {
 
     private void handleSearchResponse(@Nullable List<Business> businesses) {
         if (businesses == null || businesses.size() == 0) {
-            coffeeShopView.showMessage(R.string.no_nearby_coffee_shops);
+            coffeeShopListView.showMessage(R.string.no_nearby_coffee_shops);
             return;
         }
 
@@ -113,12 +113,12 @@ class CoffeeShopViewPresenter {
             coffeeShops.add(coffeeShop);
         }
 
-        coffeeShopModel.setCoffeeShops(coffeeShops);
-        coffeeShopView.displayCoffeeShops(coffeeShopModel);
+        coffeeShopListModel.setCoffeeShops(coffeeShops);
+        coffeeShopListView.displayCoffeeShops(coffeeShopListModel);
         if (coffeeShops.size() > 0) {
-            coffeeShopView.showShareButton();
+            coffeeShopListView.showShareButton();
         } else {
-            coffeeShopView.hideShareButton();
+            coffeeShopListView.hideShareButton();
         }
     }
 
@@ -143,7 +143,7 @@ class CoffeeShopViewPresenter {
 
     @Nullable
     private Location getCurrentLocation() {
-        Context context = coffeeShopView.getContext();
+        Context context = coffeeShopListView.getContext();
         // Make sure we really do have permission before trying to access location!
         if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e("CoffeeShopActivity", "We don't have permission to get the current device location...");
@@ -171,7 +171,7 @@ class CoffeeShopViewPresenter {
     }
 
     private void listenForLocationUpdates() {
-        Context context = coffeeShopView.getContext();
+        Context context = coffeeShopListView.getContext();
         final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -204,25 +204,25 @@ class CoffeeShopViewPresenter {
     }
 
     void onShareClicked() {
-        List<CoffeeShop> coffeeShops = coffeeShopModel.getCoffeeShops();
+        List<CoffeeShop> coffeeShops = coffeeShopListModel.getCoffeeShops();
         if (null != coffeeShops && coffeeShops.size() > 0) {
-            coffeeShopView.sendShareIntent(coffeeShopModel.getCoffeeShops().get(0));
+            coffeeShopListView.sendShareIntent(coffeeShopListModel.getCoffeeShops().get(0));
         }
     }
 
     void onPermissionGranted() {
-        coffeeShopModel.setHasLocationPermission(true);
+        coffeeShopListModel.setHasLocationPermission(true);
         sendYelpCoffeeShopSearchRequest();
     }
 
     void onRequestPermissionFailed() {
-        coffeeShopModel.setHasLocationPermission(false);
-        coffeeShopView.showPermissionError();
+        coffeeShopListModel.setHasLocationPermission(false);
+        coffeeShopListView.showPermissionError();
     }
 
     @NonNull
-    CoffeeShopModel getCoffeeShopModel() {
-        return coffeeShopModel;
+    CoffeeShopListModel getCoffeeShopListModel() {
+        return coffeeShopListModel;
     }
 
     public void onClickCoffeeShop(@Nullable CoffeeShop coffeeShop) {
@@ -230,6 +230,6 @@ class CoffeeShopViewPresenter {
             return;
         }
 
-        coffeeShopView.openCoffeeShopDetailsActivity(coffeeShop);
+        coffeeShopListView.openCoffeeShopDetailsActivity(coffeeShop);
     }
 }

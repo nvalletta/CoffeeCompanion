@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.coffeeshop;
+package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -21,18 +21,18 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasTyp
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 
-public class CoffeeShopActivityTest {
+public class CoffeeShopListActivityTest {
 
     @Rule
-    public IntentsTestRule<CoffeeShopActivity> intentsTestRule = new IntentsTestRule<CoffeeShopActivity>(CoffeeShopActivity.class) {
+    public IntentsTestRule<CoffeeShopListActivity> intentsTestRule = new IntentsTestRule<CoffeeShopListActivity>(CoffeeShopListActivity.class) {
         @Override
         protected Intent getActivityIntent() {
             Intent intent = super.getActivityIntent();
 
-            CoffeeShopModel fakeModel = new CoffeeShopModel(true);
+            CoffeeShopListModel fakeModel = new CoffeeShopListModel(true);
             fakeModel.setCoffeeShops(getFakeCoffeeShops());
 
-            intent.putExtra(CoffeeShopActivity.COFFEE_SHOPS_BUNDLE_KEY, fakeModel);
+            intent.putExtra(CoffeeShopListActivity.COFFEE_SHOPS_BUNDLE_KEY, fakeModel);
             return intent;
         }
 

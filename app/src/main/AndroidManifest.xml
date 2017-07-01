@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".beveragedetail.BeverageDetailActivity">
         </activity>
-        <activity android:name=".coffeeshop.CoffeeShopActivity">
+        <activity android:name=".coffeeshoplist.CoffeeShopListActivity">
         </activity>
         <activity android:name=".cofeeshopdetail.CoffeeShopDetailActivity">
         </activity>

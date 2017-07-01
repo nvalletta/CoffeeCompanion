@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.coffeeshop.CoffeeShop;
+import com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShop;
 
 public class CoffeeShopDetailActivity extends AppCompatActivity implements CoffeeShopDetailView {
 
@@ -33,12 +33,6 @@ public class CoffeeShopDetailActivity extends AppCompatActivity implements Coffe
     @Nullable
     private TextView titleTextView;
 
-    @Nullable
-    private AppCompatButton mapButton;
-
-    @Nullable
-    private AppCompatButton websiteButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +48,7 @@ public class CoffeeShopDetailActivity extends AppCompatActivity implements Coffe
         phoneNumberTextView = (TextView) findViewById(R.id.text_phone_number);
         titleTextView = (TextView) findViewById(R.id.text_title);
 
-        mapButton = (AppCompatButton) findViewById(R.id.button_find);
+        AppCompatButton mapButton = (AppCompatButton) findViewById(R.id.button_find);
         if (null != mapButton) {
             mapButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -64,7 +58,7 @@ public class CoffeeShopDetailActivity extends AppCompatActivity implements Coffe
             });
         }
 
-        websiteButton = (AppCompatButton) findViewById(R.id.button_website);
+        AppCompatButton websiteButton = (AppCompatButton) findViewById(R.id.button_website);
         if (null != websiteButton) {
             websiteButton.setOnClickListener(new OnClickListener() {
                 @Override
