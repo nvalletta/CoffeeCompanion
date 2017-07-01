@@ -72,10 +72,14 @@ public class BeverageDetailActivity extends AppCompatActivity implements Beverag
     }
 
     @Override
-    public void displayBeverage(@Nullable Beverage beverage) {
-        if (null == beverage) {
+    public void displayBeverage(@Nullable BeverageDetailModel beverageDetailModel) {
+        if (null == beverageDetailModel) {
             showErrorText();
         } else {
+            Beverage beverage = beverageDetailModel.getBeverage();
+            if (null == beverage) {
+                return;
+            }
             setTitle(beverage.getName());
             setDescription(beverage.getDescription());
             setImage(beverage.getDrawableResourceName());

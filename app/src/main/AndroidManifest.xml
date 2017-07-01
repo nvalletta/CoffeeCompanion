@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".coffeeshop.CoffeeShopActivity">
         </activity>
+        <activity android:name=".cofeeshopdetail.CoffeeShopDetailActivity">
+        </activity>
     </application>
 
 </manifest>

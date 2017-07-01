@@ -31,6 +31,9 @@ public class CoffeeShop implements Parcelable {
     @Nullable
     private String address;
 
+    @Nullable
+    private String imageUrl;
+
     public CoffeeShop(Business business) {
         rating = business.rating() == null ? 0.0d : business.rating();
         distance = business.distance() == null ? 0.0d : convertFromMetersToMiles(business.distance());
@@ -45,7 +48,7 @@ public class CoffeeShop implements Parcelable {
         }
     }
 
-    private CoffeeShop(double rating, double distance, @Nullable String name, boolean isClosed, @Nullable String websiteUrl, @Nullable String phoneNumber, @Nullable String address) {
+    private CoffeeShop(double rating, double distance, @Nullable String name, boolean isClosed, @Nullable String websiteUrl, @Nullable String phoneNumber, @Nullable String address, String imageUrl) {
         this.rating = rating;
         this.distance = distance;
         this.name = name;
@@ -53,6 +56,7 @@ public class CoffeeShop implements Parcelable {
         this.websiteUrl = websiteUrl;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.imageUrl = imageUrl;
     }
 
     private double convertFromMetersToMiles(double distance) {
@@ -91,6 +95,11 @@ public class CoffeeShop implements Parcelable {
         return address;
     }
 
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -102,6 +111,10 @@ public class CoffeeShop implements Parcelable {
         dest.writeDouble(distance);
         dest.writeString(name);
         dest.writeByte((byte) (isClosed ? 1 : 0));
+        dest.writeString(websiteUrl);
+        dest.writeString(phoneNumber);
+        dest.writeString(address);
+        dest.writeString(imageUrl);
     }
 
     private CoffeeShop(@NonNull Parcel parcel) {
@@ -109,6 +122,10 @@ public class CoffeeShop implements Parcelable {
         distance = parcel.readDouble();
         name = parcel.readString();
         isClosed = parcel.readByte() == 1;
+        websiteUrl = parcel.readString();
+        phoneNumber = parcel.readString();
+        address = parcel.readString();
+        imageUrl = parcel.readString();
     }
 
     public static final Parcelable.Creator<CoffeeShop> CREATOR
@@ -135,8 +152,8 @@ public class CoffeeShop implements Parcelable {
                 false,
                 "http://www.cats-r-us.com/" + number,
                 "1-800-" + number,
-                Uri.encode("1600 Amphitheatre Parkway, CA")
-        );
+                Uri.encode("1600 Amphitheatre Parkway, CA"),
+                "http://www.cats-r-us.com/fakeimage.png");
     }
 
 }

@@ -23,10 +23,10 @@ class BeverageDetailViewPresenter {
     }
 
     void onCreate(@Nullable Intent intent) {
-        if (null != intent) {
+        if (null != intent && null != intent.getExtras()) {
             Beverage beverage = getBeverageFromBundle(intent.getExtras());
             beverageDetailModel.setBeverage(beverage);
-            beverageDetailView.displayBeverage(beverage);
+            beverageDetailView.displayBeverage(beverageDetailModel);
         }
     }
 

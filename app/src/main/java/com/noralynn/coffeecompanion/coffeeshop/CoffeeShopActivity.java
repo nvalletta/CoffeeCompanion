@@ -20,10 +20,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
+import com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity;
 
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity.COFFEE_SHOP_BUNDLE_KEY;
 
 public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopView {
 
@@ -133,8 +135,10 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     }
 
     @Override
-    public void openCoffeeShopDetailsActivity(CoffeeShop coffeeShop) {
-        //todo: open coffee shop details activity
+    public void openCoffeeShopDetailsActivity(@NonNull CoffeeShop coffeeShop) {
+        Intent coffeeShopDetailIntent = new Intent(this, CoffeeShopDetailActivity.class);
+        coffeeShopDetailIntent.putExtra(COFFEE_SHOP_BUNDLE_KEY, coffeeShop);
+        startActivity(coffeeShopDetailIntent);
     }
 
     @Override

@@ -12,4 +12,8 @@
     <string name="share_title">Share using…</string>
     <string name="share">Share</string>
     <string name="coffee_shop_share_message">Let\'s go out for some coffee! I\'m only %1$s away from %2$s.</string>
+    <string name="title_activity_coffee_shop_details">CoffeeShopDetailsActivity</string>
+    <string name="content_coffee_shop_image">Coffee Shop</string>
+    <string name="find_in_google_maps">Find in Google Maps</string>
+    <string name="website">Website</string>
 </resources>
