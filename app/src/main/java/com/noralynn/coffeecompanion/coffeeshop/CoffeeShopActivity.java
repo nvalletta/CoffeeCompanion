@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,7 +24,6 @@ import com.noralynn.coffeecompanion.R;
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static com.noralynn.coffeecompanion.beveragelist.BeverageListActivity.BEVERAGE_LIST_MODEL_BUNDLE_KEY;
 
 public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopView {
 
@@ -44,6 +45,9 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     @Nullable
     private TextView emptyTextView;
 
+    @Nullable
+    private MenuItem shareItem;
+
     @NonNull
     private String[] locationPermissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -57,14 +61,36 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
 
         CoffeeShopModel model = null;
         if (null != savedInstanceState) {
-            model = savedInstanceState.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
+            model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
         }
+
+        Bundle extras = getIntent().getExtras();
+        if (null != extras) {
+            model = extras.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
+        }
+
         if (null == model) {
             model = new CoffeeShopModel(locationPermissionHasBeenGranted());
         }
 
         presenter = new CoffeeShopViewPresenter(this, model);
         presenter.onCreate();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.coffee_shop_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                presenter.onShareClicked();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void initializeViews() {
@@ -93,17 +119,37 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     }
 
     @Override
-    public void displayPermissionRequest() {
-        requestPermission(LOCATION_PERMISSION_REQUEST_CODE, locationPermissions);
+    public void showShareButton() {
+        if (shareItem != null) {
+            shareItem.setVisible(true);
+        }
     }
 
-    private boolean locationPermissionHasBeenGranted() {
-        int permission = ContextCompat.checkSelfPermission(
-                this,
-                ACCESS_COARSE_LOCATION
+    @Override
+    public void hideShareButton() {
+        if (shareItem != null) {
+            shareItem.setVisible(false);
+        }
+    }
+
+    @Override
+    public void sendShareIntent(@NonNull CoffeeShop coffeeShop) {
+        String message = getString(
+                R.string.coffee_shop_share_message,
+                coffeeShop.getHumanReadableDistance(),
+                coffeeShop.getName()
         );
 
-        return permission == PackageManager.PERMISSION_GRANTED;
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+    }
+
+    @Override
+    public void displayPermissionRequest() {
+        requestPermission(LOCATION_PERMISSION_REQUEST_CODE, locationPermissions);
     }
 
     @Override
@@ -115,14 +161,6 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     @Override
     public Context getContext() {
         return this;
-    }
-
-    @Override
-    public void shareCoffeeShop(@NonNull String message) {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-        startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_title)));
     }
 
     @Override
@@ -145,6 +183,13 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         }
     }
 
+    @Override
+    public void showMessage(@StringRes int message) {
+        hideRecyclerView();
+        hideProgressBar();
+        showEmptyTextView(message);
+    }
+
     private boolean canAccessLocation(@NonNull String[] permissions, @NonNull int[] grantResults) {
         if (permissions.length != 0) {
             String permission = permissions[0];
@@ -158,11 +203,13 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
         return false;
     }
 
-    @Override
-    public void showMessage(@StringRes int message) {
-        hideRecyclerView();
-        hideProgressBar();
-        showEmptyTextView(message);
+    private boolean locationPermissionHasBeenGranted() {
+        int permission = ContextCompat.checkSelfPermission(
+                this,
+                ACCESS_COARSE_LOCATION
+        );
+
+        return permission == PackageManager.PERMISSION_GRANTED;
     }
 
     private void hideProgressBar() {

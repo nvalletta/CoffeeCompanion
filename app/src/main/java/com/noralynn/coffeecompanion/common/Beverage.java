@@ -65,7 +65,7 @@ public class Beverage implements Parcelable {
         }
     };
 
-    public static Beverage mock() {
+    public static Beverage fake() {
         return new Beverage(
                 "Title",
                 "Description",

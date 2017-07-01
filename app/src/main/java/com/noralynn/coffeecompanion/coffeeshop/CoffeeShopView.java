@@ -8,16 +8,20 @@ interface CoffeeShopView {
 
     void showPermissionError();
 
+    void sendShareIntent(@NonNull CoffeeShop coffeeShop);
+
     void displayPermissionRequest();
 
     void showMessage(@StringRes int message);
 
     void displayCoffeeShops(@NonNull CoffeeShopModel coffeeShopModel);
 
-    void shareCoffeeShop(@NonNull String message);
-
     void requestPermission(int requestCode, @NonNull String[] permissions);
 
     @NonNull
     Context getContext();
+
+    void showShareButton();
+
+    void hideShareButton();
 }

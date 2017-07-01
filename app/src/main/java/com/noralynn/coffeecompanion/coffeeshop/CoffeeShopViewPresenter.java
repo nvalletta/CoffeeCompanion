@@ -66,18 +66,17 @@ class CoffeeShopViewPresenter {
     }
 
     void onCreate() {
+        if (coffeeShopModel.getCoffeeShops() != null) {
+            // We already have our coffee shops; just return.
+            coffeeShopView.displayCoffeeShops(coffeeShopModel);
+            return;
+        }
+
         if (!coffeeShopModel.hasLocationPermission()) {
             coffeeShopView.displayPermissionRequest();
         } else {
             onPermissionGranted();
         }
-    }
-
-    void onClickCoffeeShop(@NonNull CoffeeShop coffeeShop) {
-        coffeeShopView.shareCoffeeShop(
-            "Check out this coffee shop I found called " + coffeeShop.getName() +
-            ". It's only " + coffeeShop.getHumanReadableDistance() + " away!"
-        );
     }
 
     private void sendYelpCoffeeShopSearchRequest() {
@@ -116,6 +115,11 @@ class CoffeeShopViewPresenter {
 
         coffeeShopModel.setCoffeeShops(coffeeShops);
         coffeeShopView.displayCoffeeShops(coffeeShopModel);
+        if (coffeeShops.size() > 0) {
+            coffeeShopView.showShareButton();
+        } else {
+            coffeeShopView.hideShareButton();
+        }
     }
 
     @Nullable
@@ -178,8 +182,8 @@ class CoffeeShopViewPresenter {
         manager.requestLocationUpdates(getLocationProvider(manager), 60000, 10, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                sendYelpCoffeeShopSearchRequest();
                 manager.removeUpdates(this);
+                sendYelpCoffeeShopSearchRequest();
             }
 
             @Override
@@ -199,6 +203,13 @@ class CoffeeShopViewPresenter {
         });
     }
 
+    void onShareClicked() {
+        List<CoffeeShop> coffeeShops = coffeeShopModel.getCoffeeShops();
+        if (null != coffeeShops && coffeeShops.size() > 0) {
+            coffeeShopView.sendShareIntent(coffeeShopModel.getCoffeeShops().get(0));
+        }
+    }
+
     void onPermissionGranted() {
         coffeeShopModel.setHasLocationPermission(true);
         sendYelpCoffeeShopSearchRequest();
@@ -213,4 +224,5 @@ class CoffeeShopViewPresenter {
     CoffeeShopModel getCoffeeShopModel() {
         return coffeeShopModel;
     }
+
 }

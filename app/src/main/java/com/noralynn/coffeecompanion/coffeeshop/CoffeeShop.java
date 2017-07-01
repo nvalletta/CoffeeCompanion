@@ -27,6 +27,13 @@ public class CoffeeShop implements Parcelable {
         isClosed = business.isClosed() == null ? true : business.isClosed();
     }
 
+    private CoffeeShop(double rating, double distance, @Nullable String name, boolean isClosed) {
+        this.rating = rating;
+        this.distance = distance;
+        this.name = name;
+        this.isClosed = isClosed;
+    }
+
     private double convertFromMetersToMiles(double distance) {
         return distance * 0.000621371192;
     }
@@ -80,7 +87,17 @@ public class CoffeeShop implements Parcelable {
     };
 
     @NonNull
-    String getHumanReadableDistance() {
+    public String getHumanReadableDistance() {
         return String.format(Locale.getDefault(), "%1$,.2f mi", distance);
     }
+
+    public static CoffeeShop fake(int number) {
+        return new CoffeeShop(
+                (double)number,
+                (double)number,
+                "Coffee Shop " + number,
+                false
+        );
+    }
+
 }

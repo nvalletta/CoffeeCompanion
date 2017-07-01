@@ -25,7 +25,7 @@ import static com.noralynn.coffeecompanion.beveragedetail.BeverageDetailActivity
 public class BeverageDetailActivityTest {
 
     @NonNull
-    private static final Beverage beverage = Beverage.mock();
+    private static final Beverage beverage = Beverage.fake();
 
     @Rule
     public ActivityTestRule<BeverageDetailActivity> activityTestRule =
