@@ -35,7 +35,7 @@ class CoffeeShopAdapter extends RecyclerView.Adapter<CoffeeShopViewHolder> {
             @Override
             public void onClick(View v) {
                 if (null != coffeeShops) {
-//                    presenter.onClickCoffeeShop(coffeeShops.get(viewHolder.getAdapterPosition()));
+                    presenter.onClickCoffeeShop(coffeeShops.get(viewHolder.getAdapterPosition()));
                 }
             }
         });

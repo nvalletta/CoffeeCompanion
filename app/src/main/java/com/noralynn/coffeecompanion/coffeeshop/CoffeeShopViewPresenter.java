@@ -225,4 +225,11 @@ class CoffeeShopViewPresenter {
         return coffeeShopModel;
     }
 
+    public void onClickCoffeeShop(@Nullable CoffeeShop coffeeShop) {
+        if (null == coffeeShop) {
+            return;
+        }
+
+        coffeeShopView.openCoffeeShopDetailsActivity(coffeeShop);
+    }
 }

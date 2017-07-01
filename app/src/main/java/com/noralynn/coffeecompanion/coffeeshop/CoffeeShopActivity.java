@@ -133,6 +133,11 @@ public class CoffeeShopActivity extends AppCompatActivity implements CoffeeShopV
     }
 
     @Override
+    public void openCoffeeShopDetailsActivity(CoffeeShop coffeeShop) {
+        //todo: open coffee shop details activity
+    }
+
+    @Override
     public void sendShareIntent(@NonNull CoffeeShop coffeeShop) {
         String message = getString(
                 R.string.coffee_shop_share_message,
