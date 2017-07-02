@@ -7,7 +7,7 @@ import com.noralynn.coffeecompanion.common.Beverage;
 
 interface BeverageListView {
 
-    void startCoffeeShopActivity();
+    void startCoffeeShopListActivity();
 
     void startBeverageActivity(@NonNull Beverage beverage);
 

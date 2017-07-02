@@ -2,6 +2,7 @@ package com.noralynn.coffeecompanion.coffeeshoplist;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
 import com.noralynn.coffeecompanion.R;
@@ -23,6 +24,8 @@ import static org.hamcrest.Matchers.allOf;
 
 public class CoffeeShopListActivityTest {
 
+    private static final CoffeeShop fakeCoffeeShop = CoffeeShop.fake(99);
+
     @Rule
     public IntentsTestRule<CoffeeShopListActivity> intentsTestRule = new IntentsTestRule<CoffeeShopListActivity>(CoffeeShopListActivity.class) {
         @Override
@@ -42,18 +45,28 @@ public class CoffeeShopListActivityTest {
             for (int i = 0; i < 10; i++) {
                 coffeeShops.add(CoffeeShop.fake(i));
             }
+            coffeeShops.add(0, fakeCoffeeShop);
             return coffeeShops;
         }
     };
 
     @Test
     public void testShareButton_sendsCorrectShareIntent() {
+        String message = InstrumentationRegistry
+                .getTargetContext()
+                .getResources()
+                .getString(
+                        R.string.coffee_shop_share_message,
+                        fakeCoffeeShop.getHumanReadableDistance(),
+                        fakeCoffeeShop.getName()
+                );
+
         onView(withId(R.id.action_share)).perform(click());
 
         intended(allOf(
                 hasType("text/plain"),
                 hasAction(Intent.ACTION_SEND),
-                hasExtra(Intent.EXTRA_TEXT, "Let's go out for some coffee! I'm only 0.00 mi away from Coffee Shop 0."))
+                hasExtra(Intent.EXTRA_TEXT, message))
         );
     }
 

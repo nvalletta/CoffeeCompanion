@@ -48,7 +48,7 @@ public class CoffeeShopDetailActivity extends AppCompatActivity implements Coffe
         phoneNumberTextView = (TextView) findViewById(R.id.text_phone_number);
         titleTextView = (TextView) findViewById(R.id.text_title);
 
-        AppCompatButton mapButton = (AppCompatButton) findViewById(R.id.button_find);
+        AppCompatButton mapButton = (AppCompatButton) findViewById(R.id.button_map);
         if (null != mapButton) {
             mapButton.setOnClickListener(new OnClickListener() {
                 @Override

@@ -44,14 +44,14 @@ public class BeverageListActivityTest {
     public IntentsTestRule<BeverageListActivity> intentsTestRule = new IntentsTestRule<>(BeverageListActivity.class);
 
     @Before
-    public void stubCoffeeShopActivityIntent() {
+    public void stubCoffeeShopListActivityIntent() {
         Intent intent = new Intent();
-        ActivityResult coffeeShopActivityResult = new ActivityResult(Activity.RESULT_OK, intent);
-        intending(hasComponent(CoffeeShopListActivity.class.getName())).respondWith(coffeeShopActivityResult);
+        ActivityResult coffeeShopListActivityResult = new ActivityResult(Activity.RESULT_OK, intent);
+        intending(hasComponent(CoffeeShopListActivity.class.getName())).respondWith(coffeeShopListActivityResult);
     }
 
     @Test
-    public void testMapFabClick_shouldOpenCoffeeShopActivity() {
+    public void testMapFabClick_shouldOpenCoffeeShopListActivity() {
         onView(withId(R.id.map_fab)).perform(click());
 
         intended(hasComponent(CoffeeShopListActivity.class.getName()));

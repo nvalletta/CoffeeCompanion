@@ -53,7 +53,7 @@ public class BeverageListViewPresenter {
     }
 
     void onClickFloatingActionButton() {
-        beverageListView.startCoffeeShopActivity();
+        beverageListView.startCoffeeShopListActivity();
     }
 
     @NonNull

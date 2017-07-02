@@ -47,7 +47,7 @@
         style="@style/AppTheme"
         android:layout_gravity="center"
         android:text="@string/find_in_google_maps"
-        android:id="@+id/button_find"
+        android:id="@+id/button_map"
         android:layout_width="150dp"
         android:layout_height="wrap_content"/>
 

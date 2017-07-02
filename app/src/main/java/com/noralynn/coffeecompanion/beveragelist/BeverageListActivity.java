@@ -86,9 +86,9 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
     }
 
     @Override
-    public void startCoffeeShopActivity() {
-        Intent coffeeShopActivityIntent = new Intent(this, CoffeeShopListActivity.class);
-        startActivity(coffeeShopActivityIntent);
+    public void startCoffeeShopListActivity() {
+        Intent coffeeShopListActivityIntent = new Intent(this, CoffeeShopListActivity.class);
+        startActivity(coffeeShopListActivityIntent);
     }
 
     @NonNull

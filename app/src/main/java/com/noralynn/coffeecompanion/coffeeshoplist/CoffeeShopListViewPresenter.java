@@ -146,7 +146,7 @@ class CoffeeShopListViewPresenter {
         Context context = coffeeShopListView.getContext();
         // Make sure we really do have permission before trying to access location!
         if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("CoffeeShopActivity", "We don't have permission to get the current device location...");
+            Log.e("CoffeeShopListActivity", "We don't have permission to get the current device location...");
             return null;
         }
 
@@ -175,7 +175,7 @@ class CoffeeShopListViewPresenter {
         final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(context, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("CoffeeShopActivity", "We don't have permission to listen to the current device location...");
+            Log.e("CoffeeShopListActivity", "We don't have permission to listen to the current device location...");
             return;
         }
 
