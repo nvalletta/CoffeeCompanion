@@ -39,21 +39,7 @@ public class BeverageListActivity extends AppCompatActivity implements BeverageL
         setContentView(R.layout.activity_main);
         initializeViews();
 
-        BeverageListModel model = null;
-        if (null != savedInstanceState) {
-            model = savedInstanceState.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
-        }
-
-        Bundle extras = getIntent().getExtras();
-        if (null != extras) {
-            model = extras.getParcelable(BEVERAGE_LIST_MODEL_BUNDLE_KEY);
-        }
-
-        if (null == model) {
-            model = new BeverageListModel();
-        }
-
-        presenter = new BeverageListViewPresenter(this, model);
+        presenter = new BeverageListViewPresenter(this);
         presenter.onCreate(savedInstanceState);
     }
 

@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".cofeeshopdetail.CoffeeShopDetailActivity"
+    tools:context=".coffeeshopdetail.CoffeeShopDetailActivity"
     android:orientation="vertical">
 
     <ImageView

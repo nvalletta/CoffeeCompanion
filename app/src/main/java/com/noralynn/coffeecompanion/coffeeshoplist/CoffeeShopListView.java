@@ -26,4 +26,5 @@ interface CoffeeShopListView {
     void hideShareButton();
 
     void openCoffeeShopDetailsActivity(CoffeeShop coffeeShop);
+
 }

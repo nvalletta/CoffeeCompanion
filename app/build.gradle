@@ -49,8 +49,10 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
+    // Note that the below dependency is ONLY non-"androidTestCompile" because we
+    // are doing the ugly thing and mixing Idling Resource code with our app code.
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
 
     // Tell our test APK to use the following v25.1.0 dependencies in order to avoid conflicts:
     androidTestCompile 'com.android.support:support-v4:25.3.1'

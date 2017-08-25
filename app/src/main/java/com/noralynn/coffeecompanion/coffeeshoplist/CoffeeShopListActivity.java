@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +21,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
-import com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity;
+import com.noralynn.coffeecompanion.coffeeshopdetail.CoffeeShopDetailActivity;
+import com.noralynn.coffeecompanion.coffeeshoplist.idlingresource.CoffeeShopsIdlingResource;
 
 import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static com.noralynn.coffeecompanion.cofeeshopdetail.CoffeeShopDetailActivity.COFFEE_SHOP_BUNDLE_KEY;
+import static com.noralynn.coffeecompanion.coffeeshopdetail.CoffeeShopDetailActivity.COFFEE_SHOP_BUNDLE_KEY;
 
 public class CoffeeShopListActivity extends AppCompatActivity implements CoffeeShopListView {
 
@@ -61,27 +63,14 @@ public class CoffeeShopListActivity extends AppCompatActivity implements CoffeeS
         setContentView(R.layout.activity_coffee_shops);
         initializeViews();
 
-        CoffeeShopListModel model = null;
-        if (null != savedInstanceState) {
-            model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
-        }
-
-        Bundle extras = getIntent().getExtras();
-        if (null != extras) {
-            model = extras.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
-        }
-
-        if (null == model) {
-            model = new CoffeeShopListModel(locationPermissionHasBeenGranted());
-        }
-
-        presenter = new CoffeeShopListViewPresenter(this, model);
-        presenter.onCreate();
+        presenter = new CoffeeShopListViewPresenter(this);
+        presenter.onCreate(savedInstanceState, locationPermissionHasBeenGranted());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.coffee_shop_menu, menu);
+        shareItem = menu.findItem(R.id.action_share);
         return true;
     }
 
@@ -93,12 +82,6 @@ public class CoffeeShopListActivity extends AppCompatActivity implements CoffeeS
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void initializeViews() {
-        coffeeShopRecyclerView = (RecyclerView) findViewById(R.id.coffee_shops_recycler);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        emptyTextView = (TextView) findViewById(R.id.empty_text);
     }
 
     @Override
@@ -192,11 +175,23 @@ public class CoffeeShopListActivity extends AppCompatActivity implements CoffeeS
         }
     }
 
+    @NonNull
+    @VisibleForTesting
+    public CoffeeShopsIdlingResource getCoffeeShopsIdlingResource() {
+        return presenter.getCoffeeShopsIdlingResource();
+    }
+
     @Override
     public void showMessage(@StringRes int message) {
         hideRecyclerView();
         hideProgressBar();
         showEmptyTextView(message);
+    }
+
+    private void initializeViews() {
+        coffeeShopRecyclerView = (RecyclerView) findViewById(R.id.coffee_shops_recycler);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        emptyTextView = (TextView) findViewById(R.id.empty_text);
     }
 
     private boolean canAccessLocation(@NonNull String[] permissions, @NonNull int[] grantResults) {

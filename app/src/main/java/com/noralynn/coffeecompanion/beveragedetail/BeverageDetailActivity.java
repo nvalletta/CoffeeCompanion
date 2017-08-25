@@ -1,16 +1,17 @@
 package com.noralynn.coffeecompanion.beveragedetail;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.common.Beverage;
-import com.noralynn.coffeecompanion.common.DrawableUtils;
 
 public class BeverageDetailActivity extends AppCompatActivity implements BeverageDetailView {
 
@@ -67,7 +68,7 @@ public class BeverageDetailActivity extends AppCompatActivity implements Beverag
         if (null == imageView) {
             return;
         }
-        Drawable image = DrawableUtils.getDrawableByName(this, drawableResourceName);
+        Drawable image = getDrawableByName(drawableResourceName);
         imageView.setImageDrawable(image);
     }
 
@@ -84,6 +85,21 @@ public class BeverageDetailActivity extends AppCompatActivity implements Beverag
             setDescription(beverage.getDescription());
             setImage(beverage.getDrawableResourceName());
         }
+    }
+
+    @Nullable
+    private Drawable getDrawableByName(@Nullable String name) {
+        if (null == name) {
+            return null;
+        }
+
+        Resources resources = getResources();
+        if (null == resources) {
+            return null;
+        }
+
+        final int resourceId = resources.getIdentifier(name, "drawable", getPackageName());
+        return ResourcesCompat.getDrawable(resources, resourceId, null);
     }
 
 }

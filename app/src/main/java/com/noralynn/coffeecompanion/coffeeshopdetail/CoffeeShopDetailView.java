@@ -1,4 +1,4 @@
-package com.noralynn.coffeecompanion.cofeeshopdetail;
+package com.noralynn.coffeecompanion.coffeeshopdetail;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

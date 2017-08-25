@@ -23,7 +23,7 @@ import java.util.List;
 
 import static com.noralynn.coffeecompanion.beveragelist.BeverageListActivity.BEVERAGE_LIST_MODEL_BUNDLE_KEY;
 
-public class BeverageListViewPresenter {
+class BeverageListViewPresenter {
 
     private static final String TAG = DrawableUtils.class.getSimpleName();
 
@@ -32,15 +32,14 @@ public class BeverageListViewPresenter {
 
     private static final int FILE_NAME_BEVERAGES = R.raw.beverages;
 
-    @NonNull
+    @Nullable
     private BeverageListModel beverageListModel;
 
     @NonNull
     private BeverageListView beverageListView;
 
-    BeverageListViewPresenter(@NonNull BeverageListView beverageListView, @NonNull BeverageListModel beverageListModel) {
+    BeverageListViewPresenter(@NonNull BeverageListView beverageListView) {
         this.beverageListView = beverageListView;
-        this.beverageListModel = beverageListModel;
     }
 
     void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +47,7 @@ public class BeverageListViewPresenter {
         checkBeveragesInfo();
     }
 
-    public void onClickBeverage(@NonNull Beverage beverage) {
+    void onClickBeverage(@NonNull Beverage beverage) {
         beverageListView.startBeverageActivity(beverage);
     }
 
@@ -66,6 +65,9 @@ public class BeverageListViewPresenter {
     }
 
     private void checkBeveragesInfo() {
+        if (beverageListModel == null) {
+            return;
+        }
         // If we already have a list of beverages, don't do any more work.
         List<Beverage> beverages = beverageListModel.getBeverages();
         if (null != beverages) {
@@ -116,8 +118,8 @@ public class BeverageListViewPresenter {
         return null;
     }
 
-    @NonNull
-    public BeverageListModel getBeverageListModel() {
+    @Nullable
+    BeverageListModel getBeverageListModel() {
         return beverageListModel;
     }
 }

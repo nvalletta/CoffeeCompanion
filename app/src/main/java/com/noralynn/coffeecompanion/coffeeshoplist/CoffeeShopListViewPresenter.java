@@ -9,10 +9,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.noralynn.coffeecompanion.R;
+import com.noralynn.coffeecompanion.coffeeshoplist.idlingresource.CoffeeShopsIdlingResource;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
@@ -29,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static com.noralynn.coffeecompanion.coffeeshoplist.CoffeeShopListActivity.COFFEE_SHOPS_BUNDLE_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_KEY;
 import static com.noralynn.coffeecompanion.http.ApiConstants.CONSUMER_SECRET;
 import static com.noralynn.coffeecompanion.http.ApiConstants.TOKEN;
@@ -40,32 +43,42 @@ class CoffeeShopListViewPresenter {
     @NonNull
     private CoffeeShopListView coffeeShopListView;
 
-    @NonNull
+    @Nullable
     private CoffeeShopListModel coffeeShopListModel;
+
+    @Nullable
+    private CoffeeShopsIdlingResource coffeeShopsIdlingResource;
 
     @NonNull
     private Callback<SearchResponse> coffeeShopSearchCallback = new Callback<SearchResponse>() {
         @Override
         public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
             SearchResponse searchResponse = response.body();
-            Log.d("CoffeeShop", "onResponse() called with: response = [" + response + "]");
+            Log.d("CoffeeShop", "onSearchCompleted() called with: response = [" + response + "]");
             List<Business> businesses = searchResponse.businesses();
             handleSearchResponse(businesses);
+
+            // FOR OUR TESTS:
+            notifyIdlingResource();
         }
 
         @Override
         public void onFailure(Call<SearchResponse> call, Throwable t) {
             Log.e("CoffeeShop", "onFailure()", t);
             coffeeShopListView.showMessage(R.string.error_unable_to_load_coffee_shops);
+
+            // FOR OUR TESTS:
+            notifyIdlingResource();
         }
     };
 
-    CoffeeShopListViewPresenter(@NonNull CoffeeShopListView coffeeShopListView, @NonNull CoffeeShopListModel coffeeShopListModel) {
+    CoffeeShopListViewPresenter(@NonNull CoffeeShopListView coffeeShopListView) {
         this.coffeeShopListView = coffeeShopListView;
-        this.coffeeShopListModel = coffeeShopListModel;
     }
 
-    void onCreate() {
+    void onCreate(@Nullable Bundle savedInstanceState, boolean locationPermissionHasBeenGranted) {
+        coffeeShopListModel = getCoffeeShopListModelFromBundle(savedInstanceState, locationPermissionHasBeenGranted);
+
         if (coffeeShopListModel.getCoffeeShops() != null) {
             // We already have our coffee shops; just return.
             coffeeShopListView.displayCoffeeShops(coffeeShopListModel);
@@ -76,6 +89,33 @@ class CoffeeShopListViewPresenter {
             coffeeShopListView.displayPermissionRequest();
         } else {
             onPermissionGranted();
+        }
+    }
+
+    private CoffeeShopListModel getCoffeeShopListModelFromBundle(@Nullable Bundle savedInstanceState, boolean locationPermissionHasBeenGranted) {
+        CoffeeShopListModel model = null;
+        if (null != savedInstanceState) {
+            model = savedInstanceState.getParcelable(COFFEE_SHOPS_BUNDLE_KEY);
+        }
+        return model != null ? model : new CoffeeShopListModel(locationPermissionHasBeenGranted);
+    }
+
+    @NonNull
+    @VisibleForTesting
+    CoffeeShopsIdlingResource getCoffeeShopsIdlingResource() {
+        if (null == coffeeShopsIdlingResource) {
+            coffeeShopsIdlingResource = new CoffeeShopsIdlingResource();
+            if (coffeeShopListModel.getCoffeeShops() != null && !coffeeShopListModel.getCoffeeShops().isEmpty()) {
+                coffeeShopsIdlingResource.onSearchCompleted();
+            }
+        }
+        return coffeeShopsIdlingResource;
+    }
+
+    //FOR OUR TESTS:
+    private void notifyIdlingResource() {
+        if (null != coffeeShopsIdlingResource) {
+            coffeeShopsIdlingResource.onSearchCompleted();
         }
     }
 
