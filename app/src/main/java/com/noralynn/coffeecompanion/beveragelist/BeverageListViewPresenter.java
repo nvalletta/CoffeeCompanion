@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.noralynn.coffeecompanion.R;
 import com.noralynn.coffeecompanion.common.Beverage;
-import com.noralynn.coffeecompanion.common.DrawableUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import static com.noralynn.coffeecompanion.beveragelist.BeverageListActivity.BEV
 
 class BeverageListViewPresenter {
 
-    private static final String TAG = DrawableUtils.class.getSimpleName();
+    private static final String TAG = BeverageListViewPresenter.class.getSimpleName();
 
     @NonNull
     private static final String ENCODING_FORMAT = "UTF-8";
